@@ -90,6 +90,37 @@ window.DASH_DATA = {
       <option value="all">Alle campagnes</option>
     </select>
   </div>
+
+  <div class="filter-divider"></div>
+
+  <span class="filter-label">Periode</span>
+  <div class="filter-group">
+    <button class="date-btn" data-range="last1">Laatste dag</button>
+    <button class="date-btn" data-range="last7">7 dagen</button>
+    <button class="date-btn" data-range="last30">30 dagen</button>
+    <button class="date-btn active" data-range="all">Volledige campagne</button>
+  </div>
+
+  <div id="channel-filter-section" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div class="filter-divider"></div>
+    <span class="filter-label">Kanalen</span>
+    <div class="filter-group">
+      <label class="channel-check" data-ch="meta-see">
+        <input type="checkbox" checked/><span style="color:#0081FB">● Meta See</span>
+      </label>
+      <label class="channel-check" data-ch="meta-think">
+        <input type="checkbox" checked/><span style="color:#4267B2">● Meta Think</span>
+      </label>
+      <label class="channel-check" data-ch="tiktok">
+        <input type="checkbox" checked/><span style="color:#EE1D52">● TikTok Think</span>
+      </label>
+      <label class="channel-check" data-ch="meta-do">
+        <input type="checkbox" checked/><span style="color:#3578E5">● Meta Do</span>
+      </label>
+      <button class="ch-quick-btn" id="ch-select-all">Alles</button>
+      <button class="ch-quick-btn" id="ch-select-none">Geen</button>
+    </div>
+  </div>
 </div>
 
 <div class="main">
