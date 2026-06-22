@@ -606,7 +606,148 @@ window.setChMetric = function(ch, metric) {
   renderChannelCharts();
 };
 
+// ── AD CREATIVES ─────────────────────────────────────────
+const adMetric = { see:'imp', think:'imp', tiktok:'imp', do:'clicks' };
+
+const AD_COLORS = {
+  see:    ['#0081FB','#3399FF','#66B3FF','#99CCFF'],
+  think:  ['#4267B2','#6B8FD4','#94B7F5'],
+  tiktok: ['#EE1D52','#F5547A','#F98FA8'],
+  do:     ['#3578E5','#5A95EE','#84B2F5'],
+};
+
+function renderAdCreatives() {
+  const configs = [
+    { ch:'see',    key:'meta-see',    chartId:'chart-ads-see',    tableId:'ads-see-table',    tagsId:'ads-see-tags'    },
+    { ch:'think',  key:'meta-think',  chartId:'chart-ads-think',  tableId:'ads-think-table',  tagsId:'ads-think-tags'  },
+    { ch:'tiktok', key:'tiktok',      chartId:'chart-ads-tiktok', tableId:'ads-tiktok-table', tagsId:'ads-tiktok-tags' },
+    { ch:'do',     key:'meta-do',     chartId:'chart-ads-do',     tableId:'ads-do-table',     tagsId:'ads-do-tags'     },
+  ];
+
+  configs.forEach(({ ch, key, chartId, tableId, tagsId }) => {
+    const ads = D.adCreatives[key];
+    if (!ads) return;
+    const metric = adMetric[ch];
+
+    // Sort by chosen metric descending
+    const sorted = [...ads].sort((a, b) => (b[metric]||0) - (a[metric]||0));
+    const labels = sorted.map(a => a.label);
+    const values = sorted.map(a => a[metric] || 0);
+    const colors = AD_COLORS[ch] || ['#3182ce'];
+
+    // Horizontal bar chart
+    mkChart(chartId, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          backgroundColor: colors.slice(0, labels.length),
+          borderRadius: 4,
+          barThickness: 28,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: { legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => {
+                const v = ctx.parsed.x;
+                if (metric === 'cpm' || metric === 'cpc') return ' € ' + v.toLocaleString('nl-NL', {minimumFractionDigits:2, maximumFractionDigits:2});
+                if (metric === 'ctr' || metric === 'vtr') return ' ' + v.toLocaleString('nl-NL', {minimumFractionDigits:2, maximumFractionDigits:2}) + '%';
+                return ' ' + v.toLocaleString('nl-NL');
+              }
+            }
+          }
+        },
+        scales: {
+          x: { grid: { color:'#f1f5f9' }, ticks: { font:{size:10}, color:'#94a3b8' } },
+          y: { grid: { display:false }, ticks: { font:{size:11,weight:'600'}, color:'#374151' } }
+        }
+      }
+    });
+
+    // Table
+    const tableEl = document.getElementById(tableId);
+    if (!tableEl) return;
+    const isTikTok = ch === 'tiktok';
+    const isDo     = ch === 'do';
+    const isSee    = ch === 'see';
+
+    let thead, rows;
+    if (isTikTok) {
+      thead = `<thead><tr>
+        <th>Advertentie</th>
+        <th class="num">Impressies</th>
+        <th class="num">Views 100%</th>
+        <th class="num">VTR</th>
+        <th class="num">CPM</th>
+        <th class="num">Spend</th>
+      </tr></thead>`;
+      rows = ads.map(a => `<tr>
+        <td><strong>${a.label}</strong></td>
+        <td class="num">${fmt(a.imp)}</td>
+        <td class="num">${fmt(a.vv100||0)}</td>
+        <td class="num">${fmtP1(a.vtr||0)}</td>
+        <td class="num">${fmtE(a.cpm)}</td>
+        <td class="num">${fmtE(a.cost)}</td>
+      </tr>`).join('');
+    } else if (isDo) {
+      thead = `<thead><tr>
+        <th>Advertentie</th>
+        <th class="num">Impressies</th>
+        <th class="num">Clicks</th>
+        <th class="num">CTR</th>
+        <th class="num">CPC</th>
+        <th class="num">Spend</th>
+      </tr></thead>`;
+      rows = ads.map(a => `<tr>
+        <td><strong>${a.label}</strong></td>
+        <td class="num">${fmt(a.imp)}</td>
+        <td class="num">${fmt(a.clicks)}</td>
+        <td class="num">${fmtP(a.ctr,2)}</td>
+        <td class="num">${fmtE(a.cpc)}</td>
+        <td class="num">${fmtE(a.cost)}</td>
+      </tr>`).join('');
+    } else {
+      thead = `<thead><tr>
+        <th>Advertentie</th>
+        <th class="num">Impressies</th>
+        <th class="num">Bereik</th>
+        <th class="num">CPM</th>
+        <th class="num">CTR</th>
+        <th class="num">Spend</th>
+      </tr></thead>`;
+      rows = ads.map(a => `<tr>
+        <td><strong>${a.label}</strong></td>
+        <td class="num">${fmt(a.imp)}</td>
+        <td class="num">${fmt(a.reach)}</td>
+        <td class="num">${fmtE(a.cpm)}</td>
+        <td class="num">${fmtP(a.ctr,2)}</td>
+        <td class="num">${fmtE(a.cost)}</td>
+      </tr>`).join('');
+    }
+    tableEl.innerHTML = `<table>${thead}<tbody>${rows}</tbody></table>`;
+  });
+}
+
+window.setAdMetric = function(ch, metric) {
+  adMetric[ch] = metric;
+  // Update active button in the tags container
+  const tagsId = `ads-${ch}-tags`;
+  const tagsEl = document.getElementById(tagsId);
+  if (tagsEl) {
+    tagsEl.querySelectorAll('.chart-tag').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${metric}'`));
+    });
+  }
+  renderAdCreatives();
+};
+
 // ── INIT ─────────────────────────────────────────────────
 renderAll();
+renderAdCreatives();
 
 })();

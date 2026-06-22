@@ -58,6 +58,30 @@ window.DASH_DATA = {
     { name:'Slecht weer — <10°C',      imp:27789, cost:371.35 },
   ],
 
+  adCreatives: {
+    'meta-see': [
+      {label:'Static V1', imp:688301, clicks:262, reach:677882, cost:954.77, ctr:0.04, cpm:1.39, cpc:3.64},
+      {label:'Video V2',  imp:643560, clicks:76,  reach:635224, cost:893.87, ctr:0.01, cpm:1.39, cpc:11.76},
+      {label:'Video V1',  imp:263862, clicks:24,  reach:259133, cost:356.03, ctr:0.01, cpm:1.35, cpc:14.83},
+      {label:'Static V2', imp:217928, clicks:208, reach:214244, cost:295.11, ctr:0.10, cpm:1.35, cpc:1.42},
+    ],
+    'meta-think': [
+      {label:'Bianca',  imp:109282, clicks:17, reach:87922, cost:673.92, ctr:0.02, cpm:6.17, cpc:39.64},
+      {label:'Inge',    imp:91526,  clicks:11, reach:74692, cost:673.96, ctr:0.01, cpm:7.36, cpc:61.27},
+      {label:'Jasmina', imp:64603,  clicks:2,  reach:51599, cost:444.74, ctr:0.00, cpm:6.88, cpc:222.37},
+    ],
+    'meta-do': [
+      {label:'Static V1', imp:376075, clicks:7750, reach:306448, cost:1924.66, ctr:2.06, cpm:5.12, cpc:0.25},
+      {label:'Video V2',  imp:208190, clicks:5459, reach:183928, cost:1585.85, ctr:2.62, cpm:7.62, cpc:0.29},
+      {label:'Video V1',  imp:49825,  clicks:973,  reach:46461,  cost:338.96,  ctr:1.95, cpm:6.80, cpc:0.35},
+    ],
+    'tiktok': [
+      {label:'Inge',    imp:740222, clicks:1759, reach:709174, cost:745.93, ctr:0.24, cpm:1.01, vtr:99.5, vv100:1891},
+      {label:'Bianca',  imp:669783, clicks:1638, reach:630199, cost:779.06, ctr:0.24, cpm:1.16, vtr:99.5, vv100:4656},
+      {label:'Jasmina', imp:465380, clicks:1296, reach:442344, cost:497.27, ctr:0.28, cpm:1.07, vtr:99.5, vv100:5050},
+    ],
+  },
+
   ga4:{"2026-04-03":{"sessions":17106,"engaged":12093,"atc":100,"checkouts":70},"2026-04-04":{"sessions":14419,"engaged":10098,"atc":74,"checkouts":57},"2026-04-05":{"sessions":12535,"engaged":8633,"atc":79,"checkouts":76},"2026-04-06":{"sessions":13732,"engaged":9803,"atc":227,"checkouts":186},"2026-04-07":{"sessions":17195,"engaged":12368,"atc":159,"checkouts":115},"2026-04-08":{"sessions":18152,"engaged":13011,"atc":183,"checkouts":132},"2026-04-09":{"sessions":16453,"engaged":11821,"atc":195,"checkouts":141},"2026-04-10":{"sessions":18612,"engaged":13337,"atc":170,"checkouts":122},"2026-04-11":{"sessions":16890,"engaged":11981,"atc":155,"checkouts":113},"2026-04-12":{"sessions":13124,"engaged":9310,"atc":89,"checkouts":65},"2026-04-13":{"sessions":12038,"engaged":8584,"atc":82,"checkouts":60},"2026-04-14":{"sessions":12581,"engaged":9016,"atc":95,"checkouts":69},"2026-04-15":{"sessions":14022,"engaged":10064,"atc":109,"checkouts":80},"2026-04-16":{"sessions":15671,"engaged":11260,"atc":122,"checkouts":88},"2026-04-17":{"sessions":18098,"engaged":12984,"atc":141,"checkouts":102},"2026-04-18":{"sessions":16234,"engaged":11657,"atc":130,"checkouts":94},"2026-04-19":{"sessions":12047,"engaged":8657,"atc":97,"checkouts":70},"2026-04-20":{"sessions":11238,"engaged":8076,"atc":91,"checkouts":66},"2026-04-21":{"sessions":14571,"engaged":10458,"atc":113,"checkouts":82},"2026-04-22":{"sessions":16892,"engaged":12136,"atc":131,"checkouts":95},"2026-04-23":{"sessions":19305,"engaged":13858,"atc":150,"checkouts":108},"2026-04-24":{"sessions":21134,"engaged":15159,"atc":165,"checkouts":119},"2026-04-25":{"sessions":22478,"engaged":16127,"atc":175,"checkouts":126},"2026-04-26":{"sessions":18943,"engaged":13591,"atc":148,"checkouts":107},"2026-04-27":{"sessions":15687,"engaged":11260,"atc":122,"checkouts":88},"2026-04-28":{"sessions":14221,"engaged":10202,"atc":111,"checkouts":80},"2026-04-29":{"sessions":17834,"engaged":12796,"atc":139,"checkouts":100},"2026-04-30":{"sessions":19195,"engaged":14067,"atc":250,"checkouts":415},"2026-05-01":{"sessions":17705,"engaged":12714,"atc":237,"checkouts":328},"2026-05-02":{"sessions":17575,"engaged":12812,"atc":157,"checkouts":127},"2026-05-03":{"sessions":17106,"engaged":12093,"atc":100,"checkouts":70},"2026-05-04":{"sessions":2795,"engaged":2100,"atc":41,"checkouts":36}},
 };
 </script>
@@ -257,6 +281,29 @@ window.DASH_DATA = {
         <canvas id="chart-meta-see-spend" height="220"></canvas>
       </div>
     </div>
+    <div class="chart-row cols-2">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Meta See · Best Performing Ads</div>
+            <div class="chart-sub">Totale campagne · gerankt op impressies</div>
+          </div>
+          <div class="chart-tags" id="ads-see-tags">
+            <button class="chart-tag active" onclick="setAdMetric('see','imp')">Impressies</button>
+            <button class="chart-tag"        onclick="setAdMetric('see','reach')">Bereik</button>
+            <button class="chart-tag"        onclick="setAdMetric('see','cpm')">CPM</button>
+          </div>
+        </div>
+        <canvas id="chart-ads-see" height="160"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div>
+          <div class="chart-title">Meta See · Ads Vergelijking</div>
+          <div class="chart-sub">Spend vs. Clicks per advertentie</div>
+        </div></div>
+        <div id="ads-see-table" class="table-wrap"></div>
+      </div>
+    </div>
   </div>
 
   <!-- META THINK TAB -->
@@ -286,6 +333,29 @@ window.DASH_DATA = {
           <div class="chart-sub">Budget verloop · €2.023 totaal</div>
         </div></div>
         <canvas id="chart-meta-think-spend" height="200"></canvas>
+      </div>
+    </div>
+    <div class="chart-row cols-2">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Meta Think · Best Performing Ads</div>
+            <div class="chart-sub">Totale campagne · gerankt op impressies</div>
+          </div>
+          <div class="chart-tags" id="ads-think-tags">
+            <button class="chart-tag active" onclick="setAdMetric('think','imp')">Impressies</button>
+            <button class="chart-tag"        onclick="setAdMetric('think','reach')">Bereik</button>
+            <button class="chart-tag"        onclick="setAdMetric('think','cpm')">CPM</button>
+          </div>
+        </div>
+        <canvas id="chart-ads-think" height="140"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div>
+          <div class="chart-title">Meta Think · Ads Vergelijking</div>
+          <div class="chart-sub">Spend, bereik en CPM per video</div>
+        </div></div>
+        <div id="ads-think-table" class="table-wrap"></div>
       </div>
     </div>
   </div>
@@ -326,6 +396,29 @@ window.DASH_DATA = {
         <canvas id="chart-tiktok-spend" height="220"></canvas>
       </div>
     </div>
+    <div class="chart-row cols-2">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">TikTok Think · Best Performing Ads</div>
+            <div class="chart-sub">Totale campagne · gerankt op impressies</div>
+          </div>
+          <div class="chart-tags" id="ads-tiktok-tags">
+            <button class="chart-tag active" onclick="setAdMetric('tiktok','imp')">Impressies</button>
+            <button class="chart-tag"        onclick="setAdMetric('tiktok','reach')">Bereik</button>
+            <button class="chart-tag"        onclick="setAdMetric('tiktok','vv100')">Views 100%</button>
+          </div>
+        </div>
+        <canvas id="chart-ads-tiktok" height="140"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div>
+          <div class="chart-title">TikTok Think · Ads Vergelijking</div>
+          <div class="chart-sub">Spend, views en VTR per video</div>
+        </div></div>
+        <div id="ads-tiktok-table" class="table-wrap"></div>
+      </div>
+    </div>
   </div>
 
   <!-- META DO TAB -->
@@ -362,6 +455,29 @@ window.DASH_DATA = {
           <div class="chart-sub">Budget verloop · €3.850 totaal</div>
         </div></div>
         <canvas id="chart-meta-do-spend" height="220"></canvas>
+      </div>
+    </div>
+    <div class="chart-row cols-2">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Meta Do · Best Performing Ads</div>
+            <div class="chart-sub">Totale campagne · gerankt op clicks</div>
+          </div>
+          <div class="chart-tags" id="ads-do-tags">
+            <button class="chart-tag active" onclick="setAdMetric('do','clicks')">Clicks</button>
+            <button class="chart-tag"        onclick="setAdMetric('do','imp')">Impressies</button>
+            <button class="chart-tag"        onclick="setAdMetric('do','ctr')">CTR</button>
+          </div>
+        </div>
+        <canvas id="chart-ads-do" height="140"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div>
+          <div class="chart-title">Meta Do · Ads Vergelijking</div>
+          <div class="chart-sub">Clicks, CTR en CPC per advertentie</div>
+        </div></div>
+        <div id="ads-do-table" class="table-wrap"></div>
       </div>
     </div>
   </div>
