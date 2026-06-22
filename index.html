@@ -3,87 +3,31 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data:; connect-src 'none'"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data:; connect-src 'self'"/>
 <title>HTM · Avondkaart 2026 · Dashboard</title>
 <link rel="stylesheet" href="assets/style.css"/>
 </head>
 <body>
 
+<script src="assets/chart.min.js"></script>
 <script>
-window.DASH_CONFIG = {
-  clientName:  'HTM · Avondkaart',
-  subtitle:    'Campaign Dashboard · 3 apr – 3 mei 2026',
-  logo:        '🚋',
-  lastUpdated: '10 juni 2026',
-};
-
-window.DASH_DATA = {
-  campaigns: {
-    avondkaart: { label:'Avondkaart', dateStart:'2026-04-03', dateEnd:'2026-05-03', totalBudget:10396, totalSpent:10164.13 },
-    dooh:       { label:'HTM Slecht weer 2026', dateStart:'2026-01-30', dateEnd:'2026-02-20', totalSpent:1107.33 }
-  },
-
-  pacing: [
-    { channel:'Meta See',     platform:'Facebook / Instagram',  obj:'Awareness',   color:'#0081FB', budget:2500,  spent:2499.78, spentPct:99.99 },
-    { channel:'Meta Think',   platform:'Facebook / Instagram',  obj:'Overweging',  color:'#4267B2', budget:2023,  spent:1792.62, spentPct:88.61 },
-    { channel:'TikTok Think', platform:'TikTok',                obj:'Overweging',  color:'#EE1D52', budget:2023,  spent:2022.26, spentPct:99.96 },
-    { channel:'Meta Do',      platform:'Facebook / Instagram',  obj:'Conversie',   color:'#3578E5', budget:3850,  spent:3849.47, spentPct:99.99 },
-  ],
-
-  performance: [
-    { channel:'Meta See',     platform:'Meta',   obj:'See',   imp:1813651, clicks:570,   ctr:0.03, cpc:4.39,  cpm:1.38, spend:2499.78, freq:1.01, reach:1786483 },
-    { channel:'Meta Think',   platform:'Meta',   obj:'Think', imp:265411,  clicks:30,    ctr:0.01, cpc:59.75, cpm:6.75, spend:1792.62, freq:1.23, reach:214213  },
-    { channel:'TikTok Think', platform:'TikTok', obj:'Think', imp:1875385, clicks:4693,  ctr:0.25, cpc:0.43,  cpm:1.08, spend:2022.26, vtr:99.0, freq:1.05, reach:1781717 },
-    { channel:'Meta Do',      platform:'Meta',   obj:'Do',    imp:634090,  clicks:14182, ctr:2.24, cpc:0.27,  cpm:6.07, spend:3849.47, freq:1.13, reach:536837  },
-  ],
-
-  metaSee:{"2026-04-03":{"imp":52230,"clicks":27,"cost":78.19,"reach":51170},"2026-04-04":{"imp":62209,"clicks":22,"cost":73.36,"reach":61516},"2026-04-05":{"imp":64891,"clicks":22,"cost":75.59,"reach":64234},"2026-04-06":{"imp":72601,"clicks":19,"cost":82.41,"reach":72053},"2026-04-07":{"imp":68983,"clicks":23,"cost":79.77,"reach":68297},"2026-04-08":{"imp":62699,"clicks":15,"cost":73.82,"reach":62091},"2026-04-09":{"imp":66285,"clicks":26,"cost":76.63,"reach":65560},"2026-04-10":{"imp":62126,"clicks":17,"cost":73.26,"reach":61591},"2026-04-11":{"imp":88483,"clicks":21,"cost":100.51,"reach":87763},"2026-04-12":{"imp":71220,"clicks":21,"cost":82.26,"reach":70665},"2026-04-13":{"imp":66831,"clicks":17,"cost":78.12,"reach":66246},"2026-04-14":{"imp":59814,"clicks":19,"cost":70.52,"reach":59280},"2026-04-15":{"imp":56621,"clicks":14,"cost":67.24,"reach":56104},"2026-04-16":{"imp":58716,"clicks":17,"cost":69.63,"reach":58218},"2026-04-17":{"imp":77716,"clicks":19,"cost":90.78,"reach":77118},"2026-04-18":{"imp":107218,"clicks":26,"cost":122.14,"reach":106361},"2026-04-19":{"imp":109694,"clicks":20,"cost":124.90,"reach":109068},"2026-04-20":{"imp":95985,"clicks":24,"cost":110.33,"reach":95417},"2026-04-21":{"imp":82064,"clicks":19,"cost":95.22,"reach":81467},"2026-04-22":{"imp":88386,"clicks":20,"cost":102.24,"reach":87802},"2026-04-23":{"imp":80432,"clicks":17,"cost":93.47,"reach":79858},"2026-04-24":{"imp":84186,"clicks":21,"cost":97.67,"reach":83585},"2026-04-25":{"imp":104753,"clicks":23,"cost":120.63,"reach":104067},"2026-04-26":{"imp":112827,"clicks":24,"cost":129.50,"reach":112119},"2026-04-27":{"imp":111012,"clicks":20,"cost":127.57,"reach":110338},"2026-04-28":{"imp":98020,"clicks":25,"cost":113.26,"reach":97357},"2026-04-29":{"imp":82126,"clicks":17,"cost":95.47,"reach":81527},"2026-04-30":{"imp":86025,"clicks":20,"cost":99.89,"reach":85416},"2026-05-01":{"imp":83789,"clicks":16,"cost":97.43,"reach":83148},"2026-05-02":{"imp":102041,"clicks":16,"cost":118.50,"reach":101336},"2026-05-03":{"imp":221669,"clicks":31,"cost":229.48,"reach":220207}},
-
-  metaThink:{"2026-04-04":{"imp":1646,"clicks":1,"cost":8.16,"reach":1316},"2026-04-05":{"imp":2064,"clicks":1,"cost":10.59,"reach":1618},"2026-04-06":{"imp":2283,"clicks":2,"cost":11.49,"reach":1764},"2026-04-07":{"imp":2248,"clicks":0,"cost":9.64,"reach":1795},"2026-04-08":{"imp":2030,"clicks":0,"cost":9.38,"reach":1634},"2026-04-09":{"imp":2213,"clicks":1,"cost":9.97,"reach":1778},"2026-04-10":{"imp":2121,"clicks":0,"cost":9.69,"reach":1706},"2026-04-11":{"imp":3049,"clicks":1,"cost":13.46,"reach":2445},"2026-04-12":{"imp":2403,"clicks":1,"cost":10.77,"reach":1932},"2026-04-13":{"imp":2365,"clicks":1,"cost":10.58,"reach":1906},"2026-04-14":{"imp":2207,"clicks":0,"cost":9.94,"reach":1779},"2026-04-15":{"imp":2117,"clicks":1,"cost":9.55,"reach":1710},"2026-04-16":{"imp":2213,"clicks":1,"cost":9.95,"reach":1786},"2026-04-17":{"imp":2982,"clicks":1,"cost":13.23,"reach":2400},"2026-04-18":{"imp":4039,"clicks":2,"cost":17.61,"reach":3253},"2026-04-19":{"imp":4204,"clicks":1,"cost":18.26,"reach":3393},"2026-04-20":{"imp":3622,"clicks":1,"cost":15.91,"reach":2916},"2026-04-21":{"imp":3200,"clicks":1,"cost":14.17,"reach":2571},"2026-04-22":{"imp":3460,"clicks":1,"cost":15.27,"reach":2783},"2026-04-23":{"imp":3218,"clicks":0,"cost":14.26,"reach":2581},"2026-04-24":{"imp":3355,"clicks":1,"cost":14.83,"reach":2697},"2026-04-25":{"imp":4210,"clicks":1,"cost":18.45,"reach":3378},"2026-04-26":{"imp":4604,"clicks":1,"cost":20.02,"reach":3694},"2026-04-27":{"imp":4513,"clicks":1,"cost":19.66,"reach":3619},"2026-04-28":{"imp":3996,"clicks":1,"cost":17.47,"reach":3207},"2026-04-29":{"imp":3320,"clicks":0,"cost":14.62,"reach":2671},"2026-04-30":{"imp":3521,"clicks":1,"cost":15.45,"reach":2829},"2026-05-01":{"imp":3449,"clicks":0,"cost":15.17,"reach":2773},"2026-05-02":{"imp":4227,"clicks":1,"cost":18.51,"reach":3395},"2026-05-03":{"imp":9513,"clicks":4,"cost":39.01,"reach":7610}},
-
-  tiktok:{"2026-04-13":{"imp":21890,"clicks":75,"cost":27.75,"reach":21597,"vv":21782,"vv100":233},"2026-04-14":{"imp":39399,"clicks":120,"cost":44.82,"reach":38745,"vv":39152,"vv100":419},"2026-04-15":{"imp":33893,"clicks":92,"cost":35.01,"reach":33506,"vv":33714,"vv100":360},"2026-04-16":{"imp":29120,"clicks":68,"cost":34.25,"reach":28784,"vv":28967,"vv100":310},"2026-04-17":{"imp":37785,"clicks":101,"cost":42.08,"reach":37353,"vv":37587,"vv100":402},"2026-04-18":{"imp":29011,"clicks":68,"cost":31.57,"reach":28695,"vv":28883,"vv100":309},"2026-04-19":{"imp":35216,"clicks":92,"cost":37.72,"reach":34823,"vv":35019,"vv100":375},"2026-04-20":{"imp":29449,"clicks":68,"cost":34.97,"reach":29124,"vv":29304,"vv100":314},"2026-04-21":{"imp":26568,"clicks":57,"cost":32.20,"reach":26266,"vv":26451,"vv100":283},"2026-04-22":{"imp":31901,"clicks":91,"cost":36.50,"reach":31538,"vv":31722,"vv100":340},"2026-04-23":{"imp":32281,"clicks":75,"cost":37.95,"reach":31942,"vv":32100,"vv100":344},"2026-04-24":{"imp":34295,"clicks":75,"cost":43.56,"reach":33912,"vv":34104,"vv100":365},"2026-04-25":{"imp":37964,"clicks":86,"cost":47.38,"reach":37525,"vv":37752,"vv100":404},"2026-04-26":{"imp":35029,"clicks":57,"cost":43.19,"reach":34629,"vv":34853,"vv100":373},"2026-04-27":{"imp":30075,"clicks":79,"cost":36.66,"reach":29737,"vv":29924,"vv100":320},"2026-04-28":{"imp":31568,"clicks":76,"cost":38.49,"reach":31213,"vv":31411,"vv100":336},"2026-04-29":{"imp":33274,"clicks":84,"cost":38.64,"reach":32896,"vv":33087,"vv100":354},"2026-04-30":{"imp":34446,"clicks":80,"cost":39.60,"reach":34057,"vv":34259,"vv100":367},"2026-05-01":{"imp":33459,"clicks":81,"cost":37.77,"reach":33066,"vv":33275,"vv100":357},"2026-05-02":{"imp":39584,"clicks":80,"cost":43.90,"reach":39132,"vv":39361,"vv100":422},"2026-05-03":{"imp":89179,"clicks":207,"cost":108.25,"reach":88122,"vv":88677,"vv100":950}},
-
-  metaDo:{"2026-04-03":{"imp":2547,"clicks":81,"cost":18.93,"reach":2423},"2026-04-04":{"imp":4786,"clicks":157,"cost":30.91,"reach":4485},"2026-04-05":{"imp":5019,"clicks":163,"cost":32.50,"reach":4702},"2026-04-06":{"imp":5393,"clicks":171,"cost":34.46,"reach":5062},"2026-04-07":{"imp":5152,"clicks":168,"cost":33.02,"reach":4836},"2026-04-08":{"imp":4877,"clicks":147,"cost":31.38,"reach":4570},"2026-04-09":{"imp":5240,"clicks":155,"cost":33.57,"reach":4917},"2026-04-10":{"imp":5068,"clicks":151,"cost":32.54,"reach":4752},"2026-04-11":{"imp":7219,"clicks":209,"cost":45.28,"reach":6770},"2026-04-12":{"imp":4892,"clicks":143,"cost":30.91,"reach":4456},"2026-04-13":{"imp":4570,"clicks":114,"cost":32.36,"reach":4442},"2026-04-14":{"imp":4681,"clicks":160,"cost":36.53,"reach":4222},"2026-04-15":{"imp":4037,"clicks":125,"cost":34.92,"reach":3774},"2026-04-16":{"imp":5061,"clicks":144,"cost":42.55,"reach":4732},"2026-04-17":{"imp":2918,"clicks":65,"cost":23.97,"reach":2716},"2026-04-20":{"imp":5092,"clicks":134,"cost":32.41,"reach":4623},"2026-04-21":{"imp":9607,"clicks":322,"cost":60.77,"reach":7044},"2026-04-22":{"imp":8802,"clicks":231,"cost":54.95,"reach":7231},"2026-04-23":{"imp":7635,"clicks":221,"cost":50.80,"reach":6301},"2026-04-24":{"imp":8801,"clicks":185,"cost":51.96,"reach":7447},"2026-04-25":{"imp":10233,"clicks":247,"cost":58.52,"reach":8502},"2026-04-26":{"imp":11183,"clicks":220,"cost":59.07,"reach":9170},"2026-04-27":{"imp":11146,"clicks":219,"cost":54.46,"reach":9460},"2026-04-28":{"imp":11244,"clicks":219,"cost":55.49,"reach":9623},"2026-04-29":{"imp":21355,"clicks":339,"cost":114.71,"reach":16975},"2026-04-30":{"imp":25141,"clicks":418,"cost":151.58,"reach":19169},"2026-05-01":{"imp":27181,"clicks":420,"cost":159.95,"reach":20517},"2026-05-02":{"imp":31436,"clicks":490,"cost":165.32,"reach":22001},"2026-05-03":{"imp":19499,"clicks":324,"cost":104.79,"reach":14910}},
-
-  dooh:{"2026-01-30":{"imp":4050,"spots":900,"cost":52.37},"2026-02-02":{"imp":9551,"spots":5042,"cost":131.69},"2026-02-03":{"imp":1939,"spots":234,"cost":28.19},"2026-02-04":{"imp":3737,"spots":423,"cost":52.00},"2026-02-05":{"imp":1630,"spots":225,"cost":23.68},"2026-02-06":{"imp":1892,"spots":133,"cost":27.50},"2026-02-09":{"imp":7176,"spots":766,"cost":91.63},"2026-02-10":{"imp":6992,"spots":3443,"cost":89.79},"2026-02-11":{"imp":14299,"spots":1646,"cost":190.50},"2026-02-12":{"imp":3681,"spots":802,"cost":49.95},"2026-02-13":{"imp":5223,"spots":477,"cost":72.93},"2026-02-16":{"imp":5493,"spots":1107,"cost":74.58},"2026-02-17":{"imp":5641,"spots":435,"cost":72.07},"2026-02-18":{"imp":6442,"spots":732,"cost":88.72},"2026-02-19":{"imp":3081,"spots":442,"cost":40.52},"2026-02-20":{"imp":1470,"spots":248,"cost":21.22}},
-
-  doohPublishers:[
-    { name:'JCDecaux Netherlands', venue:'Outdoor · Urban Panels',  color:'#9B59B6', imp:38922, cost:565.66 },
-    { name:'Global NL',            venue:'Transit · Train Stations', color:'#1ABC9C', imp:43375, cost:541.67 },
-  ],
-
-  doohCampaigns:[
-    { name:'Slecht weer — Heavy Wind', imp:27438, cost:375.06 },
-    { name:'Slecht weer — 24h Rain',   imp:27070, cost:360.92 },
-    { name:'Slecht weer — <10°C',      imp:27789, cost:371.35 },
-  ],
-
-  adCreatives: {
-    'meta-see': [
-      {label:'Static V1', imp:688301, clicks:262, reach:677882, cost:954.77, ctr:0.04, cpm:1.39, cpc:3.64},
-      {label:'Video V2',  imp:643560, clicks:76,  reach:635224, cost:893.87, ctr:0.01, cpm:1.39, cpc:11.76},
-      {label:'Video V1',  imp:263862, clicks:24,  reach:259133, cost:356.03, ctr:0.01, cpm:1.35, cpc:14.83},
-      {label:'Static V2', imp:217928, clicks:208, reach:214244, cost:295.11, ctr:0.10, cpm:1.35, cpc:1.42},
-    ],
-    'meta-think': [
-      {label:'Bianca',  imp:109282, clicks:17, reach:87922, cost:673.92, ctr:0.02, cpm:6.17, cpc:39.64},
-      {label:'Inge',    imp:91526,  clicks:11, reach:74692, cost:673.96, ctr:0.01, cpm:7.36, cpc:61.27},
-      {label:'Jasmina', imp:64603,  clicks:2,  reach:51599, cost:444.74, ctr:0.00, cpm:6.88, cpc:222.37},
-    ],
-    'meta-do': [
-      {label:'Static V1', imp:376075, clicks:7750, reach:306448, cost:1924.66, ctr:2.06, cpm:5.12, cpc:0.25},
-      {label:'Video V2',  imp:208190, clicks:5459, reach:183928, cost:1585.85, ctr:2.62, cpm:7.62, cpc:0.29},
-      {label:'Video V1',  imp:49825,  clicks:973,  reach:46461,  cost:338.96,  ctr:1.95, cpm:6.80, cpc:0.35},
-    ],
-    'tiktok': [
-      {label:'Inge',    imp:740222, clicks:1759, reach:709174, cost:745.93, ctr:0.24, cpm:1.01, vtr:99.5, vv100:1891},
-      {label:'Bianca',  imp:669783, clicks:1638, reach:630199, cost:779.06, ctr:0.24, cpm:1.16, vtr:99.5, vv100:4656},
-      {label:'Jasmina', imp:465380, clicks:1296, reach:442344, cost:497.27, ctr:0.28, cpm:1.07, vtr:99.5, vv100:5050},
-    ],
-  },
-
-  ga4:{"2026-04-03":{"sessions":17106,"engaged":12093,"atc":100,"checkouts":70},"2026-04-04":{"sessions":14419,"engaged":10098,"atc":74,"checkouts":57},"2026-04-05":{"sessions":12535,"engaged":8633,"atc":79,"checkouts":76},"2026-04-06":{"sessions":13732,"engaged":9803,"atc":227,"checkouts":186},"2026-04-07":{"sessions":17195,"engaged":12368,"atc":159,"checkouts":115},"2026-04-08":{"sessions":18152,"engaged":13011,"atc":183,"checkouts":132},"2026-04-09":{"sessions":16453,"engaged":11821,"atc":195,"checkouts":141},"2026-04-10":{"sessions":18612,"engaged":13337,"atc":170,"checkouts":122},"2026-04-11":{"sessions":16890,"engaged":11981,"atc":155,"checkouts":113},"2026-04-12":{"sessions":13124,"engaged":9310,"atc":89,"checkouts":65},"2026-04-13":{"sessions":12038,"engaged":8584,"atc":82,"checkouts":60},"2026-04-14":{"sessions":12581,"engaged":9016,"atc":95,"checkouts":69},"2026-04-15":{"sessions":14022,"engaged":10064,"atc":109,"checkouts":80},"2026-04-16":{"sessions":15671,"engaged":11260,"atc":122,"checkouts":88},"2026-04-17":{"sessions":18098,"engaged":12984,"atc":141,"checkouts":102},"2026-04-18":{"sessions":16234,"engaged":11657,"atc":130,"checkouts":94},"2026-04-19":{"sessions":12047,"engaged":8657,"atc":97,"checkouts":70},"2026-04-20":{"sessions":11238,"engaged":8076,"atc":91,"checkouts":66},"2026-04-21":{"sessions":14571,"engaged":10458,"atc":113,"checkouts":82},"2026-04-22":{"sessions":16892,"engaged":12136,"atc":131,"checkouts":95},"2026-04-23":{"sessions":19305,"engaged":13858,"atc":150,"checkouts":108},"2026-04-24":{"sessions":21134,"engaged":15159,"atc":165,"checkouts":119},"2026-04-25":{"sessions":22478,"engaged":16127,"atc":175,"checkouts":126},"2026-04-26":{"sessions":18943,"engaged":13591,"atc":148,"checkouts":107},"2026-04-27":{"sessions":15687,"engaged":11260,"atc":122,"checkouts":88},"2026-04-28":{"sessions":14221,"engaged":10202,"atc":111,"checkouts":80},"2026-04-29":{"sessions":17834,"engaged":12796,"atc":139,"checkouts":100},"2026-04-30":{"sessions":19195,"engaged":14067,"atc":250,"checkouts":415},"2026-05-01":{"sessions":17705,"engaged":12714,"atc":237,"checkouts":328},"2026-05-02":{"sessions":17575,"engaged":12812,"atc":157,"checkouts":127},"2026-05-03":{"sessions":17106,"engaged":12093,"atc":100,"checkouts":70},"2026-05-04":{"sessions":2795,"engaged":2100,"atc":41,"checkouts":36}},
-};
+(function () {
+  var main = document.getElementById('main-content');
+  if (main) main.style.visibility = 'hidden';
+  fetch('./data.json')
+    .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(j) {
+      window.DASH_CONFIG = j.config;
+      window.DASH_DATA   = j.data;
+      if (main) main.style.visibility = '';
+      var s = document.createElement('script');
+      s.src = 'assets/dashboard-core.js';
+      document.body.appendChild(s);
+    })
+    .catch(function(e) {
+      document.body.innerHTML = '<p style="padding:40px;font-family:sans-serif;color:#c53030">Fout bij laden van data.json: ' + e + '</p>';
+    });
+})();
 </script>
 
 <!-- HEADER -->
@@ -634,7 +578,6 @@ window.DASH_DATA = {
   HTM 2026 Campaign Dashboard · mBuy · Data: Meta Ads, TikTok Ads, Broadsign / DOOH, Google Analytics 4
 </footer>
 
-<script src="assets/chart.min.js"></script>
-<script src="assets/dashboard-core.js"></script>
+
 </body>
 </html>
