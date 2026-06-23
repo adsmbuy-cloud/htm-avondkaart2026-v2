@@ -536,7 +536,7 @@ window.setGaMetric = function(m) {
 };
 
 function renderGa4Charts() {
-  const ga4Dates = Object.keys(D.ga4).sort();
+  const ga4Dates = Object.keys(D.ga).sort();
   const ga4Last  = ga4Dates.slice(-1)[0];
   let dates;
   if (activeDateRange === 'all') {
@@ -552,12 +552,12 @@ function renderGa4Charts() {
   mkChart('chart-ga4', {
     type:'line',
     data:{labels:dates.map(d=>d.slice(5)),datasets:[{
-      label:metricLabels[gaMetric],data:dates.map(d=>D.ga4[d]?D.ga4[d][gaMetric]||0:0),
+      label:metricLabels[gaMetric],data:dates.map(d=>D.ga[d]?D.ga[d][gaMetric]||0:0),
       borderColor:col,backgroundColor:col+'20',borderWidth:2,fill:true,tension:0.3,pointRadius:2}]
     },
     options:{responsive:true,scales:{x:{ticks:{maxTicksLimit:15,font:{size:10}}},y:{ticks:{font:{size:10}}}},plugins:{legend:{display:false}}}
   });
-  const vals  = dates.map(d=>D.ga4[d]).filter(Boolean);
+  const vals  = dates.map(d=>D.ga[d]).filter(Boolean);
   const totS  = vals.reduce((s,v)=>s+(v.sessions||0),0);
   const totE  = vals.reduce((s,v)=>s+(v.engaged||0),0);
   const totA  = vals.reduce((s,v)=>s+(v.atc||0),0);
@@ -567,7 +567,7 @@ function renderGa4Charts() {
     data:{labels:['Sessies','Betrokken','Add-to-cart','Checkouts'],datasets:[{data:[totS,totE,totA,totC],backgroundColor:['#3182ceCC','#38b2acCC','#ed8936CC','#48bb78CC'],borderRadius:4}]},
     options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)}}},scales:{x:{ticks:{font:{size:11}}},y:{ticks:{font:{size:10},callback:v=>v>=1e3?(v/1e3).toFixed(0)+'K':v}}}}
   });
-  const rateData = dates.map(d=>{const r=D.ga4[d];return r&&r.sessions?+(r.checkouts/r.sessions*100).toFixed(2):0;});
+  const rateData = dates.map(d=>{const r=D.ga[d];return r&&r.sessions?+(r.checkouts/r.sessions*100).toFixed(2):0;});
   mkChart('chart-ga4-rate', {
     type:'line',
     data:{labels:dates.map(d=>d.slice(5)),datasets:[{label:'Checkout Rate %',data:rateData,borderColor:'#48bb78',backgroundColor:'#48bb7820',borderWidth:2,fill:true,tension:0.3,pointRadius:2}]},
@@ -576,7 +576,7 @@ function renderGa4Charts() {
 }
 
 function renderGaKPIs() {
-  const ga4Dates = Object.keys(D.ga4).sort();
+  const ga4Dates = Object.keys(D.ga).sort();
   const ga4Last  = ga4Dates.slice(-1)[0];
   let dates;
   if (activeDateRange === 'all') {
@@ -587,7 +587,7 @@ function renderGaKPIs() {
     const s = new Date(lastD); s.setDate(s.getDate() - days);
     dates = ga4Dates.filter(d => d >= s.toISOString().slice(0,10));
   }
-  const vals = dates.map(d=>D.ga4[d]).filter(Boolean);
+  const vals = dates.map(d=>D.ga[d]).filter(Boolean);
   set('ga-sessions',  fmt(vals.reduce((s,v)=>s+(v.sessions||0),0)));
   set('ga-engaged',   fmt(vals.reduce((s,v)=>s+(v.engaged||0),0)));
   set('ga-atc',       fmt(vals.reduce((s,v)=>s+(v.atc||0),0)));
