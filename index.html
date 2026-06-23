@@ -3,182 +3,31 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data:; connect-src 'self'"/>
 <title>HTM · Avondkaart 2026 · Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
-<style>
-:root{
-  --bg:#f0f2f5;--card:#fff;--header:#1a2332;--border:#dde1e7;
-  --text:#1a1a2e;--muted:#6b7280;--blue:#2b6cb0;--blue-l:#ebf4ff;
-  --green:#276749;--green-l:#e6f9f0;--orange:#c05621;--orange-l:#fff5eb;
-  --red:#c53030;--red-l:#fff5f5;--accent:#3182ce;--pill:#e2e8f0;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px}
-.header{background:var(--header);color:#fff;padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.header-left{display:flex;align-items:center;gap:12px}
-.header-logo{font-size:22px}
-.header-title{font-size:16px;font-weight:700}
-.header-sub{font-size:11px;color:#94a3b8;margin-top:1px}
-.header-right{display:flex;align-items:center;gap:12px}
-.header-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:4px 10px;font-size:11px;color:#94a3b8}
-.live-indicator{display:flex;align-items:center;gap:6px;font-size:11px;color:#94a3b8}
-.live-dot{width:7px;height:7px;border-radius:50%;background:#48bb78;box-shadow:0 0 0 2px rgba(72,187,120,.3);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 2px rgba(72,187,120,.3)}50%{box-shadow:0 0 0 5px rgba(72,187,120,.1)}}
-.filter-bar{background:#1e293b;border-bottom:1px solid #334155;padding:10px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.filter-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#64748b}
-.filter-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.campaign-select{background:#0f172a;border:1px solid #334155;border-radius:6px;color:#e2e8f0;padding:5px 10px;font-size:12px;font-family:inherit;cursor:pointer}
-.campaign-select:focus{outline:none;border-color:var(--accent)}
-.divider{width:1px;height:24px;background:#334155}
-.main{padding:20px 24px;max-width:1600px;margin:0 auto}
-
-/* KPI CARDS */
-.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px}
-.kpi-row-4{grid-template-columns:repeat(4,1fr)}
-.kpi-row-3{grid-template-columns:repeat(3,1fr)}
-.kpi-card{background:var(--card);border-radius:8px;padding:14px 16px;border:1px solid var(--border);border-top:3px solid var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.06);transition:transform .15s,box-shadow .15s}
-.kpi-card.orange{border-top-color:#ed8936}.kpi-card.green{border-top-color:#48bb78}
-.kpi-card.purple{border-top-color:#9f7aea}.kpi-card.teal{border-top-color:#38b2ac}.kpi-card.red{border-top-color:#fc8181}
-.kpi-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
-.kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:5px}
-.kpi-val{font-size:22px;font-weight:800;line-height:1;color:var(--text)}
-.kpi-sub{font-size:10px;color:var(--muted);margin-top:4px}
-
-/* GRID LAYOUTS */
-.chart-row{display:grid;gap:14px;margin-bottom:14px}
-.cols-1{grid-template-columns:1fr}
-.cols-2{grid-template-columns:1fr 1fr}
-.cols-3{grid-template-columns:1fr 1fr 1fr}
-.cols-13{grid-template-columns:1fr 1.3fr}
-.cols-21{grid-template-columns:2fr 1fr}
-.cols-31{grid-template-columns:3fr 1fr}
-
-/* CHART CARDS */
-.chart-card{background:var(--card);border-radius:8px;padding:18px 20px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .2s}
-.chart-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1)}
-.chart-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:8px}
-.chart-title{font-size:12px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.4px}
-.chart-sub{font-size:10px;color:var(--muted);margin-top:2px}
-.chart-tag{background:var(--pill);border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600;color:var(--muted);border:none;cursor:pointer;white-space:nowrap;transition:all .15s}
-.chart-tag:hover,.chart-tag.active{background:var(--accent);color:#fff}
-.chart-tags{display:flex;gap:4px;flex-wrap:wrap}
-
-/* TABS */
-.tab-row{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:16px;overflow-x:auto}
-.tab-btn{padding:9px 16px;border:none;background:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap}
-.tab-btn:hover{color:var(--accent);background:rgba(49,130,206,.08);border-radius:4px 4px 0 0}
-.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
-.tab-pane{display:none}.tab-pane.active{display:block}
-
-/* TABLES */
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12px}
-thead th{background:#f8fafc;padding:9px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap}
-thead th.num{text-align:right}
-tbody tr:hover{background:#f8fafc}
-tbody td{padding:8px 12px;border-bottom:1px solid #f1f5f9}
-tbody td.num{text-align:right;font-variant-numeric:tabular-nums}
-.total-row td{font-weight:700;background:#f0f9ff;color:var(--blue)}
-
-/* BADGES */
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700}
-.b-green{background:var(--green-l);color:var(--green)}.b-blue{background:var(--blue-l);color:var(--blue)}
-.b-orange{background:var(--orange-l);color:var(--orange)}.b-grey{background:#f1f5f9;color:#64748b}.b-red{background:var(--red-l);color:var(--red)}
-
-/* PROGRESS BAR */
-.prog-wrap{display:flex;align-items:center;gap:8px}
-.prog-bg{flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden;min-width:60px}
-.prog-fill{height:100%;border-radius:3px;background:var(--accent)}
-.prog-fill.warn{background:#ed8936}.prog-fill.over{background:#fc8181}
-.prog-txt{font-size:10px;font-weight:600;color:var(--muted);white-space:nowrap;min-width:40px;text-align:right}
-
-/* DOT */
-.ch-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
-
-/* PACING CARDS */
-.pacing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
-.pacing-card{background:var(--card);border-radius:8px;padding:16px 18px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.pacing-card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:8px}
-.pacing-ch-name{font-size:13px;font-weight:700;color:var(--text)}
-.pacing-ch-sub{font-size:10px;color:var(--muted);margin-top:2px}
-.pacing-prog{margin:10px 0 12px}
-.pacing-prog .prog-bg{height:6px}
-.pacing-stats{font-size:11px;color:var(--muted);line-height:1.7}
-.pacing-stats strong{color:var(--text);font-weight:700}
-
-/* FUNNEL */
-.funnel-wrap{position:relative}
-
-/* NO DATA */
-.no-data{padding:40px;text-align:center;color:var(--muted);font-size:12px;font-style:italic}
-
-/* SECTION HEADER */
-.section-head{display:flex;align-items:center;gap:10px;margin:18px 0 12px}
-.section-title{font-size:13px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.4px}
-.section-sub{font-size:11px;color:var(--muted)}
-
-footer{text-align:center;padding:16px;font-size:10px;color:#94a3b8;border-top:1px solid var(--border);margin-top:10px;background:#fff}
-canvas{cursor:crosshair}
-
-@media(max-width:1100px){.pacing-grid{grid-template-columns:repeat(2,1fr)}.kpi-row{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr)}.cols-2,.cols-13,.cols-21,.cols-31{grid-template-columns:1fr}.pacing-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.kpi-row{grid-template-columns:repeat(2,1fr)}.pacing-grid{grid-template-columns:1fr}}
-</style>
+<link rel="stylesheet" href="assets/style.css"/>
 </head>
 <body>
 
+<script src="assets/chart.min.js"></script>
 <script>
-window.DASH_CONFIG = {
-  clientName:  'HTM · Avondkaart',
-  subtitle:    'Campaign Dashboard · 3 apr – 3 mei 2026',
-  logo:        '🚋',
-  lastUpdated: '10 juni 2026',
-};
-
-window.DASH_DATA = {
-  campaigns: {
-    avondkaart: { label:'Avondkaart', dateStart:'2026-04-03', dateEnd:'2026-05-03', totalBudget:10396, totalSpent:10164.13 },
-    dooh:       { label:'HTM Slecht weer 2026', dateStart:'2026-01-30', dateEnd:'2026-02-20', totalSpent:694.17 }
-  },
-
-  pacing: [
-    { channel:'Meta See',     platform:'Facebook / Instagram',  obj:'Awareness',   color:'#0081FB', budget:2500,  spent:2499.78, spentPct:99.99 },
-    { channel:'Meta Think',   platform:'Facebook / Instagram',  obj:'Overweging',  color:'#4267B2', budget:2023,  spent:1792.62, spentPct:88.61 },
-    { channel:'TikTok Think', platform:'TikTok',                obj:'Overweging',  color:'#EE1D52', budget:2023,  spent:2022.26, spentPct:99.96 },
-    { channel:'Meta Do',      platform:'Facebook / Instagram',  obj:'Conversie',   color:'#3578E5', budget:3850,  spent:3849.47, spentPct:99.99 },
-  ],
-
-  performance: [
-    { channel:'Meta See',     platform:'Meta',   obj:'See',   imp:1813651, clicks:570,   ctr:0.03, cpc:4.39,  cpm:1.38, spend:2499.78, freq:1.01, reach:1786483 },
-    { channel:'Meta Think',   platform:'Meta',   obj:'Think', imp:265411,  clicks:30,    ctr:0.01, cpc:59.75, cpm:6.75, spend:1792.62, freq:1.23, reach:214213  },
-    { channel:'TikTok Think', platform:'TikTok', obj:'Think', imp:1875385, clicks:4693,  ctr:0.25, cpc:0.43,  cpm:1.08, spend:2022.26, vtr:99.0, freq:1.05, reach:1781717 },
-    { channel:'Meta Do',      platform:'Meta',   obj:'Do',    imp:634090,  clicks:14182, ctr:2.24, cpc:0.27,  cpm:6.07, spend:3849.47, freq:1.13, reach:536837  },
-  ],
-
-  metaSee:{"2026-04-03":{"imp":52230,"clicks":27,"cost":78.19,"reach":51170},"2026-04-04":{"imp":62209,"clicks":22,"cost":73.36,"reach":61516},"2026-04-05":{"imp":64891,"clicks":22,"cost":75.59,"reach":64234},"2026-04-06":{"imp":72601,"clicks":19,"cost":82.41,"reach":72053},"2026-04-07":{"imp":68983,"clicks":23,"cost":79.77,"reach":68297},"2026-04-08":{"imp":62699,"clicks":15,"cost":73.82,"reach":62091},"2026-04-09":{"imp":66285,"clicks":26,"cost":76.63,"reach":65560},"2026-04-10":{"imp":62126,"clicks":17,"cost":73.26,"reach":61591},"2026-04-11":{"imp":88483,"clicks":21,"cost":100.51,"reach":87763},"2026-04-12":{"imp":71220,"clicks":21,"cost":82.26,"reach":70665},"2026-04-13":{"imp":66831,"clicks":17,"cost":78.12,"reach":66246},"2026-04-14":{"imp":59814,"clicks":19,"cost":70.52,"reach":59280},"2026-04-15":{"imp":56621,"clicks":14,"cost":67.24,"reach":56104},"2026-04-16":{"imp":58716,"clicks":17,"cost":69.63,"reach":58218},"2026-04-17":{"imp":77716,"clicks":19,"cost":90.78,"reach":77118},"2026-04-18":{"imp":107218,"clicks":26,"cost":122.14,"reach":106361},"2026-04-19":{"imp":109694,"clicks":20,"cost":124.90,"reach":109068},"2026-04-20":{"imp":95985,"clicks":24,"cost":110.33,"reach":95417},"2026-04-21":{"imp":82064,"clicks":19,"cost":95.22,"reach":81467},"2026-04-22":{"imp":88386,"clicks":20,"cost":102.24,"reach":87802},"2026-04-23":{"imp":80432,"clicks":17,"cost":93.47,"reach":79858},"2026-04-24":{"imp":84186,"clicks":21,"cost":97.67,"reach":83585},"2026-04-25":{"imp":104753,"clicks":23,"cost":120.63,"reach":104067},"2026-04-26":{"imp":112827,"clicks":24,"cost":129.50,"reach":112119},"2026-04-27":{"imp":111012,"clicks":20,"cost":127.57,"reach":110338},"2026-04-28":{"imp":98020,"clicks":25,"cost":113.26,"reach":97357},"2026-04-29":{"imp":82126,"clicks":17,"cost":95.47,"reach":81527},"2026-04-30":{"imp":86025,"clicks":20,"cost":99.89,"reach":85416},"2026-05-01":{"imp":83789,"clicks":16,"cost":97.43,"reach":83148},"2026-05-02":{"imp":102041,"clicks":16,"cost":118.50,"reach":101336},"2026-05-03":{"imp":221669,"clicks":31,"cost":229.48,"reach":220207}},
-
-  metaThink:{"2026-04-04":{"imp":1646,"clicks":1,"cost":8.16,"reach":1316},"2026-04-05":{"imp":2064,"clicks":1,"cost":10.59,"reach":1618},"2026-04-06":{"imp":2283,"clicks":2,"cost":11.49,"reach":1764},"2026-04-07":{"imp":2248,"clicks":0,"cost":9.64,"reach":1795},"2026-04-08":{"imp":2030,"clicks":0,"cost":9.38,"reach":1634},"2026-04-09":{"imp":2213,"clicks":1,"cost":9.97,"reach":1778},"2026-04-10":{"imp":2121,"clicks":0,"cost":9.69,"reach":1706},"2026-04-11":{"imp":3049,"clicks":1,"cost":13.46,"reach":2445},"2026-04-12":{"imp":2403,"clicks":1,"cost":10.77,"reach":1932},"2026-04-13":{"imp":2365,"clicks":1,"cost":10.58,"reach":1906},"2026-04-14":{"imp":2207,"clicks":0,"cost":9.94,"reach":1779},"2026-04-15":{"imp":2117,"clicks":1,"cost":9.55,"reach":1710},"2026-04-16":{"imp":2213,"clicks":1,"cost":9.95,"reach":1786},"2026-04-17":{"imp":2982,"clicks":1,"cost":13.23,"reach":2400},"2026-04-18":{"imp":4039,"clicks":2,"cost":17.61,"reach":3253},"2026-04-19":{"imp":4204,"clicks":1,"cost":18.26,"reach":3393},"2026-04-20":{"imp":3622,"clicks":1,"cost":15.91,"reach":2916},"2026-04-21":{"imp":3200,"clicks":1,"cost":14.17,"reach":2571},"2026-04-22":{"imp":3460,"clicks":1,"cost":15.27,"reach":2783},"2026-04-23":{"imp":3218,"clicks":0,"cost":14.26,"reach":2581},"2026-04-24":{"imp":3355,"clicks":1,"cost":14.83,"reach":2697},"2026-04-25":{"imp":4210,"clicks":1,"cost":18.45,"reach":3378},"2026-04-26":{"imp":4604,"clicks":1,"cost":20.02,"reach":3694},"2026-04-27":{"imp":4513,"clicks":1,"cost":19.66,"reach":3619},"2026-04-28":{"imp":3996,"clicks":1,"cost":17.47,"reach":3207},"2026-04-29":{"imp":3320,"clicks":0,"cost":14.62,"reach":2671},"2026-04-30":{"imp":3521,"clicks":1,"cost":15.45,"reach":2829},"2026-05-01":{"imp":3449,"clicks":0,"cost":15.17,"reach":2773},"2026-05-02":{"imp":4227,"clicks":1,"cost":18.51,"reach":3395},"2026-05-03":{"imp":9513,"clicks":4,"cost":39.01,"reach":7610}},
-
-  tiktok:{"2026-04-13":{"imp":21890,"clicks":75,"cost":27.75,"reach":21597,"vv":21782,"vv100":233},"2026-04-14":{"imp":39399,"clicks":120,"cost":44.82,"reach":38745,"vv":39152,"vv100":419},"2026-04-15":{"imp":33893,"clicks":92,"cost":35.01,"reach":33506,"vv":33714,"vv100":360},"2026-04-16":{"imp":29120,"clicks":68,"cost":34.25,"reach":28784,"vv":28967,"vv100":310},"2026-04-17":{"imp":37785,"clicks":101,"cost":42.08,"reach":37353,"vv":37587,"vv100":402},"2026-04-18":{"imp":29011,"clicks":68,"cost":31.57,"reach":28695,"vv":28883,"vv100":309},"2026-04-19":{"imp":35216,"clicks":92,"cost":37.72,"reach":34823,"vv":35019,"vv100":375},"2026-04-20":{"imp":29449,"clicks":68,"cost":34.97,"reach":29124,"vv":29304,"vv100":314},"2026-04-21":{"imp":26568,"clicks":57,"cost":32.20,"reach":26266,"vv":26451,"vv100":283},"2026-04-22":{"imp":31901,"clicks":91,"cost":36.50,"reach":31538,"vv":31722,"vv100":340},"2026-04-23":{"imp":32281,"clicks":75,"cost":37.95,"reach":31942,"vv":32100,"vv100":344},"2026-04-24":{"imp":34295,"clicks":75,"cost":43.56,"reach":33912,"vv":34104,"vv100":365},"2026-04-25":{"imp":37964,"clicks":86,"cost":47.38,"reach":37525,"vv":37752,"vv100":404},"2026-04-26":{"imp":35029,"clicks":57,"cost":43.19,"reach":34629,"vv":34853,"vv100":373},"2026-04-27":{"imp":30075,"clicks":79,"cost":36.66,"reach":29737,"vv":29924,"vv100":320},"2026-04-28":{"imp":31568,"clicks":76,"cost":38.49,"reach":31213,"vv":31411,"vv100":336},"2026-04-29":{"imp":33274,"clicks":84,"cost":38.64,"reach":32896,"vv":33087,"vv100":354},"2026-04-30":{"imp":34446,"clicks":80,"cost":39.60,"reach":34057,"vv":34259,"vv100":367},"2026-05-01":{"imp":33459,"clicks":81,"cost":37.77,"reach":33066,"vv":33275,"vv100":357},"2026-05-02":{"imp":39584,"clicks":80,"cost":43.90,"reach":39132,"vv":39361,"vv100":422},"2026-05-03":{"imp":89179,"clicks":207,"cost":108.25,"reach":88122,"vv":88677,"vv100":950}},
-
-  metaDo:{"2026-04-03":{"imp":2547,"clicks":81,"cost":18.93,"reach":2423},"2026-04-04":{"imp":4786,"clicks":157,"cost":30.91,"reach":4485},"2026-04-05":{"imp":5019,"clicks":163,"cost":32.50,"reach":4702},"2026-04-06":{"imp":5393,"clicks":171,"cost":34.46,"reach":5062},"2026-04-07":{"imp":5152,"clicks":168,"cost":33.02,"reach":4836},"2026-04-08":{"imp":4877,"clicks":147,"cost":31.38,"reach":4570},"2026-04-09":{"imp":5240,"clicks":155,"cost":33.57,"reach":4917},"2026-04-10":{"imp":5068,"clicks":151,"cost":32.54,"reach":4752},"2026-04-11":{"imp":7219,"clicks":209,"cost":45.28,"reach":6770},"2026-04-12":{"imp":4892,"clicks":143,"cost":30.91,"reach":4456},"2026-04-13":{"imp":4570,"clicks":114,"cost":32.36,"reach":4442},"2026-04-14":{"imp":4681,"clicks":160,"cost":36.53,"reach":4222},"2026-04-15":{"imp":4037,"clicks":125,"cost":34.92,"reach":3774},"2026-04-16":{"imp":5061,"clicks":144,"cost":42.55,"reach":4732},"2026-04-17":{"imp":2918,"clicks":65,"cost":23.97,"reach":2716},"2026-04-20":{"imp":5092,"clicks":134,"cost":32.41,"reach":4623},"2026-04-21":{"imp":9607,"clicks":322,"cost":60.77,"reach":7044},"2026-04-22":{"imp":8802,"clicks":231,"cost":54.95,"reach":7231},"2026-04-23":{"imp":7635,"clicks":221,"cost":50.80,"reach":6301},"2026-04-24":{"imp":8801,"clicks":185,"cost":51.96,"reach":7447},"2026-04-25":{"imp":10233,"clicks":247,"cost":58.52,"reach":8502},"2026-04-26":{"imp":11183,"clicks":220,"cost":59.07,"reach":9170},"2026-04-27":{"imp":11146,"clicks":219,"cost":54.46,"reach":9460},"2026-04-28":{"imp":11244,"clicks":219,"cost":55.49,"reach":9623},"2026-04-29":{"imp":21355,"clicks":339,"cost":114.71,"reach":16975},"2026-04-30":{"imp":25141,"clicks":418,"cost":151.58,"reach":19169},"2026-05-01":{"imp":27181,"clicks":420,"cost":159.95,"reach":20517},"2026-05-02":{"imp":31436,"clicks":490,"cost":165.32,"reach":22001},"2026-05-03":{"imp":19499,"clicks":324,"cost":104.79,"reach":14910}},
-
-  dooh:{"2026-01-30":{"imp":3718,"spots":820,"cost":46.14},"2026-02-02":{"imp":10207,"spots":4744,"cost":117.90},"2026-02-03":{"imp":1513,"spots":293,"cost":14.41},"2026-02-05":{"imp":2234,"spots":228,"cost":22.40},"2026-02-10":{"imp":2014,"spots":167,"cost":19.27},"2026-02-12":{"imp":3406,"spots":448,"cost":35.27},"2026-02-13":{"imp":2756,"spots":218,"cost":27.46},"2026-02-14":{"imp":2141,"spots":330,"cost":20.97},"2026-02-17":{"imp":7213,"spots":1238,"cost":76.25},"2026-02-18":{"imp":13048,"spots":1742,"cost":140.35},"2026-02-19":{"imp":17421,"spots":2088,"cost":190.23},"2026-02-20":{"imp":16626,"spots":1762,"cost":183.52}},
-
-  doohPublishers:[
-    { name:'JCDecaux Netherlands', venue:'Outdoor · Urban Panels',    color:'#9B59B6', imp:38922, cost:360.03 },
-    { name:'Global NL',            venue:'Transit · Train Stations',   color:'#1ABC9C', imp:43375, cost:334.15 },
-  ],
-
-  doohCampaigns:[
-    { name:'Slecht weer — Heavy Wind', imp:27438, cost:235.88 },
-    { name:'Slecht weer — 24h Rain',   imp:27070, cost:225.83 },
-    { name:'Slecht weer — <10°C',      imp:27789, cost:232.47 },
-  ],
-
-  ga4:{"2026-04-03":{"sessions":17106,"engaged":12093,"atc":100,"checkouts":70},"2026-04-04":{"sessions":14419,"engaged":10098,"atc":74,"checkouts":57},"2026-04-05":{"sessions":12535,"engaged":8633,"atc":79,"checkouts":76},"2026-04-06":{"sessions":13732,"engaged":9803,"atc":227,"checkouts":186},"2026-04-07":{"sessions":17195,"engaged":12368,"atc":159,"checkouts":115},"2026-04-08":{"sessions":18152,"engaged":13011,"atc":183,"checkouts":132},"2026-04-09":{"sessions":16453,"engaged":11821,"atc":195,"checkouts":141},"2026-04-10":{"sessions":18612,"engaged":13337,"atc":170,"checkouts":122},"2026-04-11":{"sessions":16890,"engaged":11981,"atc":155,"checkouts":113},"2026-04-12":{"sessions":13124,"engaged":9310,"atc":89,"checkouts":65},"2026-04-13":{"sessions":12038,"engaged":8584,"atc":82,"checkouts":60},"2026-04-14":{"sessions":12581,"engaged":9016,"atc":95,"checkouts":69},"2026-04-15":{"sessions":14022,"engaged":10064,"atc":109,"checkouts":80},"2026-04-16":{"sessions":15671,"engaged":11260,"atc":122,"checkouts":88},"2026-04-17":{"sessions":18098,"engaged":12984,"atc":141,"checkouts":102},"2026-04-18":{"sessions":16234,"engaged":11657,"atc":130,"checkouts":94},"2026-04-19":{"sessions":12047,"engaged":8657,"atc":97,"checkouts":70},"2026-04-20":{"sessions":11238,"engaged":8076,"atc":91,"checkouts":66},"2026-04-21":{"sessions":14571,"engaged":10458,"atc":113,"checkouts":82},"2026-04-22":{"sessions":16892,"engaged":12136,"atc":131,"checkouts":95},"2026-04-23":{"sessions":19305,"engaged":13858,"atc":150,"checkouts":108},"2026-04-24":{"sessions":21134,"engaged":15159,"atc":165,"checkouts":119},"2026-04-25":{"sessions":22478,"engaged":16127,"atc":175,"checkouts":126},"2026-04-26":{"sessions":18943,"engaged":13591,"atc":148,"checkouts":107},"2026-04-27":{"sessions":15687,"engaged":11260,"atc":122,"checkouts":88},"2026-04-28":{"sessions":14221,"engaged":10202,"atc":111,"checkouts":80},"2026-04-29":{"sessions":17834,"engaged":12796,"atc":139,"checkouts":100},"2026-04-30":{"sessions":19195,"engaged":14067,"atc":250,"checkouts":415},"2026-05-01":{"sessions":17705,"engaged":12714,"atc":237,"checkouts":328},"2026-05-02":{"sessions":17575,"engaged":12812,"atc":157,"checkouts":127},"2026-05-03":{"sessions":17106,"engaged":12093,"atc":100,"checkouts":70},"2026-05-04":{"sessions":2795,"engaged":2100,"atc":41,"checkouts":36}},
-};
+(function () {
+  var main = document.getElementById('main-content');
+  if (main) main.style.visibility = 'hidden';
+  fetch('./data.json')
+    .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(j) {
+      window.DASH_CONFIG = j.config;
+      window.DASH_DATA   = j.data;
+      if (main) main.style.visibility = '';
+      var s = document.createElement('script');
+      s.src = 'assets/dashboard-core.js';
+      document.body.appendChild(s);
+    })
+    .catch(function(e) {
+      document.body.innerHTML = '<p style="padding:40px;font-family:sans-serif;color:#c53030">Fout bij laden van data.json: ' + e + '</p>';
+    });
+})();
 </script>
 
 <!-- HEADER -->
@@ -209,41 +58,72 @@ window.DASH_DATA = {
       <option value="all">Alle campagnes</option>
     </select>
   </div>
+
+  <div class="filter-divider"></div>
+
+  <span class="filter-label">Periode</span>
+  <div class="filter-group">
+    <button class="date-btn" data-range="last1">Laatste dag</button>
+    <button class="date-btn" data-range="last7">7 dagen</button>
+    <button class="date-btn" data-range="last30">30 dagen</button>
+    <button class="date-btn active" data-range="all">Volledige campagne</button>
+  </div>
+
+  <div id="channel-filter-section" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div class="filter-divider"></div>
+    <span class="filter-label">Kanalen</span>
+    <div class="filter-group">
+      <label class="channel-check" data-ch="meta-see">
+        <input type="checkbox" checked/><span style="color:#0081FB">● Meta See</span>
+      </label>
+      <label class="channel-check" data-ch="meta-think">
+        <input type="checkbox" checked/><span style="color:#4267B2">● Meta Think</span>
+      </label>
+      <label class="channel-check" data-ch="tiktok">
+        <input type="checkbox" checked/><span style="color:#EE1D52">● TikTok Think</span>
+      </label>
+      <label class="channel-check" data-ch="meta-do">
+        <input type="checkbox" checked/><span style="color:#3578E5">● Meta Do</span>
+      </label>
+      <button class="ch-quick-btn" id="ch-select-all">Alles</button>
+      <button class="ch-quick-btn" id="ch-select-none">Geen</button>
+    </div>
+  </div>
 </div>
 
 <div class="main">
 
   <!-- 6 KPI CARDS -->
-  <div class="kpi-row" id="kpi-row">
+  <div class="kpi-row">
     <div class="kpi-card">
       <div class="kpi-label">Impressies</div>
-      <div class="kpi-val" id="kpi-imp">4,59M</div>
-      <div class="kpi-sub" id="kpi-imp-sub">alle kanalen gecombineerd</div>
+      <div class="kpi-val" id="kpi-imp">—</div>
+      <div class="kpi-sub" id="kpi-imp-sub"></div>
     </div>
     <div class="kpi-card teal">
       <div class="kpi-label">Bereik</div>
-      <div class="kpi-val" id="kpi-reach">4,32M</div>
-      <div class="kpi-sub" id="kpi-reach-sub">unieke personen</div>
+      <div class="kpi-val" id="kpi-reach">—</div>
+      <div class="kpi-sub" id="kpi-reach-sub"></div>
     </div>
     <div class="kpi-card green">
       <div class="kpi-label">Clicks</div>
-      <div class="kpi-val" id="kpi-clicks">19.475</div>
-      <div class="kpi-sub" id="kpi-clicks-sub">link clicks</div>
+      <div class="kpi-val" id="kpi-clicks">—</div>
+      <div class="kpi-sub" id="kpi-clicks-sub"></div>
     </div>
     <div class="kpi-card orange">
       <div class="kpi-label">Besteed</div>
-      <div class="kpi-val" id="kpi-spent">€ 10.164</div>
-      <div class="kpi-sub" id="kpi-spent-sub">van € 10.396 budget</div>
+      <div class="kpi-val" id="kpi-spent">—</div>
+      <div class="kpi-sub" id="kpi-spent-sub"></div>
     </div>
     <div class="kpi-card purple">
       <div class="kpi-label">CTR</div>
-      <div class="kpi-val" id="kpi-ctr">0,42%</div>
-      <div class="kpi-sub" id="kpi-ctr-sub">gem. click-through rate</div>
+      <div class="kpi-val" id="kpi-ctr">—</div>
+      <div class="kpi-sub" id="kpi-ctr-sub"></div>
     </div>
     <div class="kpi-card red">
       <div class="kpi-label">CPM</div>
-      <div class="kpi-val" id="kpi-cpm">€ 2,21</div>
-      <div class="kpi-sub" id="kpi-cpm-sub">kosten per 1.000 imp.</div>
+      <div class="kpi-val" id="kpi-cpm">—</div>
+      <div class="kpi-sub" id="kpi-cpm-sub"></div>
     </div>
   </div>
 
@@ -258,13 +138,9 @@ window.DASH_DATA = {
     <button class="tab-btn" data-tab="ga4">🌐 GA4</button>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════
-       OVERVIEW TAB
-  ══════════════════════════════════════════════════════ -->
+  <!-- OVERVIEW TAB -->
   <div class="tab-pane active" id="tab-overview">
-
     <div class="chart-row cols-21">
-      <!-- Campagne Funnel -->
       <div class="chart-card">
         <div class="chart-head">
           <div>
@@ -274,19 +150,17 @@ window.DASH_DATA = {
         </div>
         <canvas id="funnel-chart" height="160"></canvas>
       </div>
-      <!-- Besteding per kanaal donut -->
       <div class="chart-card">
         <div class="chart-head">
           <div>
             <div class="chart-title">Besteding per Kanaal</div>
-            <div class="chart-sub" id="spend-donut-sub">Totaal: € 10.164,13</div>
+            <div class="chart-sub" id="spend-donut-sub"></div>
           </div>
         </div>
         <canvas id="spend-donut" height="200"></canvas>
       </div>
     </div>
 
-    <!-- Kanaaloverzicht Table -->
     <div class="chart-row cols-1">
       <div class="chart-card">
         <div class="chart-head">
@@ -296,17 +170,11 @@ window.DASH_DATA = {
           </div>
         </div>
         <div class="table-wrap">
-          <table id="overview-table">
+          <table>
             <thead><tr>
-              <th>Kanaal</th>
-              <th>Fase</th>
-              <th class="num">Impressies</th>
-              <th class="num">Bereik</th>
-              <th class="num">Freq.</th>
-              <th class="num">Clicks</th>
-              <th class="num">CTR</th>
-              <th class="num">CPM</th>
-              <th class="num">Besteed</th>
+              <th>Kanaal</th><th>Fase</th>
+              <th class="num">Impressies</th><th class="num">Bereik</th><th class="num">Freq.</th>
+              <th class="num">Clicks</th><th class="num">CTR</th><th class="num">CPM</th><th class="num">Besteed</th>
             </tr></thead>
             <tbody id="overview-tbody"></tbody>
           </table>
@@ -314,18 +182,14 @@ window.DASH_DATA = {
       </div>
     </div>
 
-    <!-- Budget Pacing per Kanaal -->
     <div class="section-head">
       <div class="section-title">Budget Pacing per Kanaal</div>
       <div class="section-sub" id="pacing-section-sub">Avondkaart · 3 apr – 3 mei 2026</div>
     </div>
     <div class="pacing-grid" id="pacing-grid"></div>
+  </div>
 
-  </div><!-- /overview -->
-
-  <!-- ══════════════════════════════════════════════════════
-       META SEE TAB
-  ══════════════════════════════════════════════════════ -->
+  <!-- META SEE TAB -->
   <div class="tab-pane" id="tab-meta-see">
     <div class="kpi-row kpi-row-4" id="kpi-meta-see"></div>
     <div class="chart-row cols-1">
@@ -336,10 +200,10 @@ window.DASH_DATA = {
             <div class="chart-sub">Facebook / Instagram · Awareness · 3 apr – 3 mei 2026</div>
           </div>
           <div class="chart-tags">
-            <button class="chart-tag active" id="ms-m-imp"   onclick="setChMetric('see','imp')">Impressies</button>
-            <button class="chart-tag"        id="ms-m-reach" onclick="setChMetric('see','reach')">Bereik</button>
+            <button class="chart-tag active" id="ms-m-imp"    onclick="setChMetric('see','imp')">Impressies</button>
+            <button class="chart-tag"        id="ms-m-reach"  onclick="setChMetric('see','reach')">Bereik</button>
             <button class="chart-tag"        id="ms-m-clicks" onclick="setChMetric('see','clicks')">Clicks</button>
-            <button class="chart-tag"        id="ms-m-cost"  onclick="setChMetric('see','cost')">Spend</button>
+            <button class="chart-tag"        id="ms-m-cost"   onclick="setChMetric('see','cost')">Spend</button>
           </div>
         </div>
         <canvas id="chart-meta-see" height="260"></canvas>
@@ -361,11 +225,32 @@ window.DASH_DATA = {
         <canvas id="chart-meta-see-spend" height="220"></canvas>
       </div>
     </div>
+    <div class="chart-row cols-2">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Meta See · Best Performing Ads</div>
+            <div class="chart-sub">Totale campagne · gerankt op impressies</div>
+          </div>
+          <div class="chart-tags" id="ads-see-tags">
+            <button class="chart-tag active" onclick="setAdMetric('see','imp')">Impressies</button>
+            <button class="chart-tag"        onclick="setAdMetric('see','reach')">Bereik</button>
+            <button class="chart-tag"        onclick="setAdMetric('see','cpm')">CPM</button>
+          </div>
+        </div>
+        <canvas id="chart-ads-see" height="160"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div>
+          <div class="chart-title">Meta See · Ads Vergelijking</div>
+          <div class="chart-sub">Spend vs. Clicks per advertentie</div>
+        </div></div>
+        <div id="ads-see-table" class="table-wrap"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════
-       META THINK TAB
-  ══════════════════════════════════════════════════════ -->
+  <!-- META THINK TAB -->
   <div class="tab-pane" id="tab-meta-think">
     <div class="kpi-row kpi-row-4" id="kpi-meta-think"></div>
     <div class="chart-row cols-1">
@@ -394,11 +279,32 @@ window.DASH_DATA = {
         <canvas id="chart-meta-think-spend" height="200"></canvas>
       </div>
     </div>
+    <div class="chart-row cols-2">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Meta Think · Best Performing Ads</div>
+            <div class="chart-sub">Totale campagne · gerankt op impressies</div>
+          </div>
+          <div class="chart-tags" id="ads-think-tags">
+            <button class="chart-tag active" onclick="setAdMetric('think','imp')">Impressies</button>
+            <button class="chart-tag"        onclick="setAdMetric('think','reach')">Bereik</button>
+            <button class="chart-tag"        onclick="setAdMetric('think','cpm')">CPM</button>
+          </div>
+        </div>
+        <canvas id="chart-ads-think" height="140"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div>
+          <div class="chart-title">Meta Think · Ads Vergelijking</div>
+          <div class="chart-sub">Spend, bereik en CPM per video</div>
+        </div></div>
+        <div id="ads-think-table" class="table-wrap"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════
-       TIKTOK THINK TAB
-  ══════════════════════════════════════════════════════ -->
+  <!-- TIKTOK THINK TAB -->
   <div class="tab-pane" id="tab-tiktok">
     <div class="kpi-row kpi-row-4" id="kpi-tiktok"></div>
     <div class="chart-row cols-1">
@@ -434,11 +340,32 @@ window.DASH_DATA = {
         <canvas id="chart-tiktok-spend" height="220"></canvas>
       </div>
     </div>
+    <div class="chart-row cols-2">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">TikTok Think · Best Performing Ads</div>
+            <div class="chart-sub">Totale campagne · gerankt op impressies</div>
+          </div>
+          <div class="chart-tags" id="ads-tiktok-tags">
+            <button class="chart-tag active" onclick="setAdMetric('tiktok','imp')">Impressies</button>
+            <button class="chart-tag"        onclick="setAdMetric('tiktok','reach')">Bereik</button>
+            <button class="chart-tag"        onclick="setAdMetric('tiktok','vv100')">Views 100%</button>
+          </div>
+        </div>
+        <canvas id="chart-ads-tiktok" height="140"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div>
+          <div class="chart-title">TikTok Think · Ads Vergelijking</div>
+          <div class="chart-sub">Spend, views en VTR per video</div>
+        </div></div>
+        <div id="ads-tiktok-table" class="table-wrap"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════
-       META DO TAB
-  ══════════════════════════════════════════════════════ -->
+  <!-- META DO TAB -->
   <div class="tab-pane" id="tab-meta-do">
     <div class="kpi-row kpi-row-4" id="kpi-meta-do"></div>
     <div class="chart-row cols-1">
@@ -474,13 +401,33 @@ window.DASH_DATA = {
         <canvas id="chart-meta-do-spend" height="220"></canvas>
       </div>
     </div>
+    <div class="chart-row cols-2">
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <div class="chart-title">Meta Do · Best Performing Ads</div>
+            <div class="chart-sub">Totale campagne · gerankt op clicks</div>
+          </div>
+          <div class="chart-tags" id="ads-do-tags">
+            <button class="chart-tag active" onclick="setAdMetric('do','clicks')">Clicks</button>
+            <button class="chart-tag"        onclick="setAdMetric('do','imp')">Impressies</button>
+            <button class="chart-tag"        onclick="setAdMetric('do','ctr')">CTR</button>
+          </div>
+        </div>
+        <canvas id="chart-ads-do" height="140"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div>
+          <div class="chart-title">Meta Do · Ads Vergelijking</div>
+          <div class="chart-sub">Clicks, CTR en CPC per advertentie</div>
+        </div></div>
+        <div id="ads-do-table" class="table-wrap"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════
-       DOOH TAB
-  ══════════════════════════════════════════════════════ -->
+  <!-- DOOH TAB -->
   <div class="tab-pane" id="tab-dooh">
-
     <div class="kpi-row kpi-row-3">
       <div class="kpi-card">
         <div class="kpi-label">Totale Impressies</div>
@@ -489,7 +436,7 @@ window.DASH_DATA = {
       </div>
       <div class="kpi-card orange">
         <div class="kpi-label">Media Kosten</div>
-        <div class="kpi-val">€ 694</div>
+        <div class="kpi-val">€ 694,17</div>
         <div class="kpi-sub">JCDecaux + Global NL</div>
       </div>
       <div class="kpi-card teal">
@@ -498,7 +445,6 @@ window.DASH_DATA = {
         <div class="kpi-sub">Kosten per 1.000 impressies</div>
       </div>
     </div>
-
     <div class="chart-row cols-21">
       <div class="chart-card">
         <div class="chart-head"><div>
@@ -515,7 +461,6 @@ window.DASH_DATA = {
         <canvas id="chart-dooh-donut" height="200"></canvas>
       </div>
     </div>
-
     <div class="chart-row cols-1">
       <div class="chart-card">
         <div class="chart-head"><div>
@@ -566,15 +511,11 @@ window.DASH_DATA = {
         </div>
       </div>
     </div>
+  </div>
 
-  </div><!-- /dooh -->
-
-  <!-- ══════════════════════════════════════════════════════
-       GA4 TAB
-  ══════════════════════════════════════════════════════ -->
+  <!-- GA4 TAB -->
   <div class="tab-pane" id="tab-ga4">
-
-    <div class="kpi-row kpi-row-4" id="kpi-ga4">
+    <div class="kpi-row kpi-row-4">
       <div class="kpi-card">
         <div class="kpi-label">Sessies</div>
         <div class="kpi-val" id="ga-sessions">—</div>
@@ -596,7 +537,6 @@ window.DASH_DATA = {
         <div class="kpi-sub">afgeronde aankopen</div>
       </div>
     </div>
-
     <div class="chart-row cols-1">
       <div class="chart-card">
         <div class="chart-head">
@@ -614,7 +554,6 @@ window.DASH_DATA = {
         <canvas id="chart-ga4" height="280"></canvas>
       </div>
     </div>
-
     <div class="chart-row cols-2">
       <div class="chart-card">
         <div class="chart-head"><div>
@@ -631,8 +570,7 @@ window.DASH_DATA = {
         <canvas id="chart-ga4-rate" height="220"></canvas>
       </div>
     </div>
-
-  </div><!-- /ga4 -->
+  </div>
 
 </div><!-- /main -->
 
@@ -640,542 +578,6 @@ window.DASH_DATA = {
   HTM 2026 Campaign Dashboard · mBuy · Data: Meta Ads, TikTok Ads, Broadsign / DOOH, Google Analytics 4
 </footer>
 
-<script>
-(function () {
-'use strict';
-const D = window.DASH_DATA;
-const fmt   = n => (+n).toLocaleString('nl-NL',{minimumFractionDigits:0,maximumFractionDigits:0});
-const fmtE  = n => '€ ' + (+n).toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtP  = (n,d=2) => (+n).toLocaleString('nl-NL',{minimumFractionDigits:d,maximumFractionDigits:d})+'%';
-const fmtP1 = n => fmtP(n,1);
 
-const CH = {
-  'Meta See':     { color:'#0081FB', dataKey:'metaSee',   obj:'See',   phase:'See' },
-  'Meta Think':   { color:'#4267B2', dataKey:'metaThink', obj:'Think', phase:'Think' },
-  'TikTok Think': { color:'#EE1D52', dataKey:'tiktok',    obj:'Think', phase:'Think' },
-  'Meta Do':      { color:'#3578E5', dataKey:'metaDo',    obj:'Do',    phase:'Do' },
-};
-
-const CHARTS = {};
-function mkChart(id, cfg) {
-  if (CHARTS[id]) { CHARTS[id].destroy(); }
-  const el = document.getElementById(id);
-  if (!el) return null;
-  CHARTS[id] = new Chart(el, cfg);
-  return CHARTS[id];
-}
-
-const LEGEND = { position:'bottom', labels:{ boxWidth:10, padding:12, font:{size:11} } };
-
-// ── active campaign state ─────────────────────────────────
-let activeCampaign = 'avondkaart';
-
-// ── metric states per channel ─────────────────────────────
-const chMetric = { see:'imp', think:'imp', tiktok:'imp', do:'imp' };
-let gaMetric = 'sessions';
-
-// ── TABS ─────────────────────────────────────────────────
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    setTimeout(renderCharts, 50);
-  });
-});
-
-// ── CAMPAIGN FILTER ───────────────────────────────────────
-document.getElementById('campaign-filter').addEventListener('change', function() {
-  activeCampaign = this.value;
-  renderAll();
-});
-
-// ── HELPERS ───────────────────────────────────────────────
-function sumDaily(data, key) {
-  return Object.values(data).reduce((s, d) => s + (d[key] || 0), 0);
-}
-function dailyDates(data) {
-  return Object.keys(data).sort();
-}
-function cumulative(vals) {
-  let s = 0;
-  return vals.map(v => (s += v));
-}
-
-// ── RENDER ALL ────────────────────────────────────────────
-function renderAll() {
-  renderKPIs();
-  renderOverviewTable();
-  renderPacingCards();
-  renderCharts();
-  renderGaKPIs();
-}
-
-function renderCharts() {
-  renderFunnelChart();
-  renderSpendDonut();
-  renderChannelCharts();
-  renderDoohCharts();
-  renderGa4Charts();
-}
-
-// ── KPIs ─────────────────────────────────────────────────
-function renderKPIs() {
-  if (activeCampaign === 'dooh') {
-    set('kpi-imp',     '82.297');
-    set('kpi-imp-sub', 'DOOH impressies');
-    set('kpi-reach',   '—');
-    set('kpi-reach-sub', 'geen bereik meting');
-    set('kpi-clicks',  '—');
-    set('kpi-clicks-sub', 'DOOH · geen click tracking');
-    set('kpi-spent',   '€ 694,17');
-    set('kpi-spent-sub', 'media kosten totaal');
-    set('kpi-ctr',     '—');
-    set('kpi-ctr-sub', 'niet beschikbaar');
-    set('kpi-cpm',     '€ 8,44');
-    set('kpi-cpm-sub', 'kosten per 1.000 imp.');
-    return;
-  }
-  const perf = D.performance;
-  const totImp    = perf.reduce((s,p) => s+p.imp, 0);
-  const totReach  = perf.reduce((s,p) => s+p.reach, 0);
-  const totClicks = perf.reduce((s,p) => s+p.clicks, 0);
-  const totSpend  = perf.reduce((s,p) => s+p.spend, 0);
-  const ctr       = totImp > 0 ? totClicks/totImp*100 : 0;
-  const cpm       = totImp > 0 ? totSpend/totImp*1000 : 0;
-  const budget    = D.pacing.reduce((s,p) => s+p.budget, 0);
-
-  set('kpi-imp',      totImp >= 1e6 ? (totImp/1e6).toFixed(2).replace('.',',')+' M' : fmt(totImp));
-  set('kpi-imp-sub',  'alle kanalen gecombineerd');
-  set('kpi-reach',    totReach >= 1e6 ? (totReach/1e6).toFixed(2).replace('.',',')+' M' : fmt(totReach));
-  set('kpi-reach-sub','unieke personen');
-  set('kpi-clicks',   fmt(totClicks));
-  set('kpi-clicks-sub','link clicks');
-  set('kpi-spent',    fmtE(totSpend));
-  set('kpi-spent-sub','van '+fmtE(budget)+' budget');
-  set('kpi-ctr',      fmtP(ctr));
-  set('kpi-ctr-sub',  'gem. click-through rate');
-  set('kpi-cpm',      fmtE(cpm));
-  set('kpi-cpm-sub',  'kosten per 1.000 imp.');
-}
-
-function set(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-// ── OVERVIEW TABLE ────────────────────────────────────────
-function renderOverviewTable() {
-  const tbody = document.getElementById('overview-tbody');
-  if (!tbody) return;
-
-  if (activeCampaign === 'dooh') {
-    tbody.innerHTML = D.doohPublishers.map(p => `
-      <tr>
-        <td><span class="ch-dot" style="background:${p.color}"></span>${p.name}</td>
-        <td><span class="badge b-grey">DOOH</span></td>
-        <td class="num">${fmt(p.imp)}</td>
-        <td class="num">—</td>
-        <td class="num">—</td>
-        <td class="num">—</td>
-        <td class="num">—</td>
-        <td class="num">${fmtE(p.cost/p.imp*1000)}</td>
-        <td class="num">${fmtE(p.cost)}</td>
-      </tr>`).join('') +
-      `<tr class="total-row">
-        <td colspan="2"><strong>Totaal</strong></td>
-        <td class="num"><strong>82.297</strong></td>
-        <td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td>
-        <td class="num"><strong>€ 8,44</strong></td>
-        <td class="num"><strong>€ 694,17</strong></td>
-      </tr>`;
-    return;
-  }
-
-  const perf = D.performance;
-  let html = '';
-  perf.forEach(p => {
-    const badgeCls = p.obj==='See' ? 'b-blue' : p.obj==='Think' ? 'b-orange' : 'b-green';
-    html += `<tr>
-      <td><span class="ch-dot" style="background:${CH[p.channel].color}"></span><strong>${p.channel}</strong></td>
-      <td><span class="badge ${badgeCls}">${p.obj}</span></td>
-      <td class="num">${fmt(p.imp)}</td>
-      <td class="num">${fmt(p.reach)}</td>
-      <td class="num">${p.freq.toFixed(2)}</td>
-      <td class="num">${fmt(p.clicks)}</td>
-      <td class="num">${fmtP(p.ctr)}</td>
-      <td class="num">${fmtE(p.cpm)}</td>
-      <td class="num">${fmtE(p.spend)}</td>
-    </tr>`;
-  });
-
-  const ti = perf.reduce((s,p)=>s+p.imp,0);
-  const tr = perf.reduce((s,p)=>s+p.reach,0);
-  const tc = perf.reduce((s,p)=>s+p.clicks,0);
-  const ts = perf.reduce((s,p)=>s+p.spend,0);
-  html += `<tr class="total-row">
-    <td colspan="2"><strong>Totaal</strong></td>
-    <td class="num"><strong>${fmt(ti)}</strong></td>
-    <td class="num"><strong>${fmt(tr)}</strong></td>
-    <td class="num">—</td>
-    <td class="num"><strong>${fmt(tc)}</strong></td>
-    <td class="num"><strong>${fmtP(ti>0?tc/ti*100:0)}</strong></td>
-    <td class="num"><strong>${fmtE(ti>0?ts/ti*1000:0)}</strong></td>
-    <td class="num"><strong>${fmtE(ts)}</strong></td>
-  </tr>`;
-  tbody.innerHTML = html;
-}
-
-// ── PACING CARDS ──────────────────────────────────────────
-function renderPacingCards() {
-  const grid = document.getElementById('pacing-grid');
-  if (!grid) return;
-
-  if (activeCampaign === 'dooh') {
-    grid.innerHTML = D.doohPublishers.map(p => {
-      const cpm = p.cost/p.imp*1000;
-      return `<div class="pacing-card">
-        <div class="pacing-card-head">
-          <div>
-            <div class="pacing-ch-name"><span class="ch-dot" style="background:${p.color}"></span>${p.name}</div>
-            <div class="pacing-ch-sub">${p.venue}</div>
-          </div>
-          <span class="badge b-green">Afgerond</span>
-        </div>
-        <div class="pacing-stats">
-          Impressies: <strong>${fmt(p.imp)}</strong><br>
-          Kosten: <strong>${fmtE(p.cost)}</strong> &nbsp;·&nbsp; CPM: <strong>${fmtE(cpm)}</strong>
-        </div>
-      </div>`;
-    }).join('');
-    return;
-  }
-
-  grid.innerHTML = D.pacing.map(p => {
-    const pct = p.spentPct;
-    const left = p.budget - p.spent;
-    let badgeCls = 'b-green', badgeTxt = 'Op schema';
-    if (pct < 85) { badgeCls = 'b-red';    badgeTxt = 'Significant achter'; }
-    else if (pct < 95) { badgeCls = 'b-orange'; badgeTxt = 'Licht achter'; }
-    const fillCls = pct > 100 ? 'over' : pct < 85 ? 'warn' : '';
-    return `<div class="pacing-card">
-      <div class="pacing-card-head">
-        <div>
-          <div class="pacing-ch-name"><span class="ch-dot" style="background:${p.color}"></span>${p.channel}</div>
-          <div class="pacing-ch-sub">${p.platform} · ${p.obj}</div>
-        </div>
-        <span class="badge ${badgeCls}">${badgeTxt}</span>
-      </div>
-      <div class="pacing-prog">
-        <div class="prog-wrap">
-          <div class="prog-bg"><div class="prog-fill ${fillCls}" style="width:${Math.min(100,pct)}%"></div></div>
-          <span class="prog-txt">${fmtP1(pct)}</span>
-        </div>
-      </div>
-      <div class="pacing-stats">
-        Besteed: <strong>${fmtE(p.spent)}</strong><br>
-        Budget: <strong>${fmtE(p.budget)}</strong> &nbsp;·&nbsp; Resterend: <strong>${fmtE(Math.max(0,left))}</strong>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ── FUNNEL CHART ──────────────────────────────────────────
-function renderFunnelChart() {
-  const see   = D.performance.find(p=>p.channel==='Meta See');
-  const think = [D.performance.find(p=>p.channel==='Meta Think'), D.performance.find(p=>p.channel==='TikTok Think')];
-  const doP   = D.performance.find(p=>p.channel==='Meta Do');
-
-  mkChart('funnel-chart', {
-    type: 'bar',
-    data: {
-      labels: ['See (Meta)', 'Think (Meta + TikTok)', 'Do (Meta)'],
-      datasets: [{
-        label: 'Bereik',
-        data: [
-          see ? see.reach : 0,
-          think.reduce((s,p) => s+(p?p.reach:0), 0),
-          doP ? doP.reach : 0
-        ],
-        backgroundColor: ['#0081FBCC','#7B61FFCC','#3578E5CC'],
-        borderRadius: 4,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ' Bereik: ' + fmt(ctx.raw) } }
-      },
-      scales: {
-        x: { ticks: { font:{size:10}, callback: v => v>=1e6 ? (v/1e6).toFixed(1)+'M' : v>=1e3 ? (v/1e3).toFixed(0)+'K' : v } },
-        y: { ticks: { font:{size:11} } }
-      }
-    }
-  });
-}
-
-// ── SPEND DONUT ───────────────────────────────────────────
-function renderSpendDonut() {
-  if (activeCampaign === 'dooh') {
-    const pubs = D.doohPublishers;
-    mkChart('spend-donut', {
-      type:'doughnut',
-      data:{ labels: pubs.map(p=>p.name), datasets:[{ data:pubs.map(p=>p.cost), backgroundColor:pubs.map(p=>p.color), borderWidth:2 }] },
-      options:{ cutout:'65%', plugins:{ legend:LEGEND, tooltip:{ callbacks:{ label: ctx=>' '+ctx.label+': '+fmtE(ctx.raw) } } } }
-    });
-    return;
-  }
-  mkChart('spend-donut', {
-    type:'doughnut',
-    data:{
-      labels: D.performance.map(p=>p.channel),
-      datasets:[{ data:D.performance.map(p=>p.spend), backgroundColor:D.performance.map(p=>CH[p.channel].color), borderWidth:2 }]
-    },
-    options:{ cutout:'65%', plugins:{ legend:LEGEND, tooltip:{ callbacks:{ label: ctx=>' '+ctx.label+': '+fmtE(ctx.raw) } } } }
-  });
-  const totSpend = D.performance.reduce((s,p)=>s+p.spend,0);
-  set('spend-donut-sub','Totaal: '+fmtE(totSpend));
-}
-
-// ── PER-CHANNEL CHARTS ────────────────────────────────────
-const CH_CHART_MAP = {
-  see:    { dataKey:'metaSee',   color:'#0081FB', id:'chart-meta-see',   spendId:'chart-meta-see-spend',   cumId:'chart-meta-see-reach' },
-  think:  { dataKey:'metaThink', color:'#4267B2', id:'chart-meta-think', spendId:'chart-meta-think-spend', cumId:null },
-  tiktok: { dataKey:'tiktok',    color:'#EE1D52', id:'chart-tiktok',     spendId:'chart-tiktok-spend',     cumId:null },
-  do:     { dataKey:'metaDo',    color:'#3578E5', id:'chart-meta-do',    spendId:'chart-meta-do-spend',    cumId:'chart-meta-do-cumclicks' },
-};
-
-const metricLabels = { imp:'Impressies', reach:'Bereik', clicks:'Clicks', cost:'Spend (€)', sessions:'Sessies', engaged:'Betrokken', atc:'Add-to-cart', checkouts:'Checkouts' };
-
-function renderChannelCharts() {
-  Object.entries(CH_CHART_MAP).forEach(([key, cfg]) => {
-    const raw = D[cfg.dataKey];
-    const dates = dailyDates(raw);
-    const metric = chMetric[key];
-    const color = cfg.color;
-
-    mkChart(cfg.id, {
-      type:'line',
-      data:{
-        labels: dates.map(d=>d.slice(5)),
-        datasets:[{
-          label: metricLabels[metric],
-          data: dates.map(d => raw[d]?raw[d][metric]||0:0),
-          borderColor: color, backgroundColor: color+'20',
-          borderWidth:2, fill:true, tension:0.3, pointRadius:2,
-        }]
-      },
-      options:{
-        responsive:true,
-        scales:{ x:{ticks:{maxTicksLimit:15,font:{size:10}}}, y:{ticks:{font:{size:10}}} },
-        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx=>' '+metricLabels[metric]+': '+fmt(ctx.raw) } } }
-      }
-    });
-
-    mkChart(cfg.spendId, {
-      type:'bar',
-      data:{
-        labels: dates.map(d=>d.slice(5)),
-        datasets:[{
-          label:'Spend (€)',
-          data: dates.map(d => raw[d]?raw[d].cost||0:0),
-          backgroundColor: color+'CC', borderRadius:3,
-        }]
-      },
-      options:{
-        responsive:true,
-        scales:{ x:{ticks:{maxTicksLimit:15,font:{size:10}}}, y:{ticks:{font:{size:10}}} },
-        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx=>' €'+ctx.raw.toFixed(2) } } }
-      }
-    });
-
-    if (cfg.cumId) {
-      const cumKey = key === 'do' ? 'clicks' : 'reach';
-      const cumVals = cumulative(dates.map(d => raw[d]?raw[d][cumKey]||0:0));
-      mkChart(cfg.cumId, {
-        type:'line',
-        data:{
-          labels: dates.map(d=>d.slice(5)),
-          datasets:[{
-            label: key==='do' ? 'Cumulatieve Clicks' : 'Cumulatief Bereik',
-            data: cumVals,
-            borderColor: color, backgroundColor: color+'20',
-            borderWidth:2, fill:true, tension:0.1, pointRadius:2,
-          }]
-        },
-        options:{
-          responsive:true,
-          scales:{ x:{ticks:{maxTicksLimit:15,font:{size:10}}}, y:{ticks:{font:{size:10},callback:v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v}} },
-          plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)}} }
-        }
-      });
-    }
-  });
-
-  // TikTok video views
-  renderTikTokVV();
-
-  // Channel KPI cards
-  renderChannelKPIs();
-}
-
-function renderTikTokVV() {
-  const dates = dailyDates(D.tiktok);
-  mkChart('chart-tiktok-vv', {
-    type:'line',
-    data:{
-      labels: dates.map(d=>d.slice(5)),
-      datasets:[
-        { label:'Video Views', data:dates.map(d=>D.tiktok[d].vv||0), borderColor:'#EE1D52', backgroundColor:'#EE1D5220', borderWidth:2, fill:true, tension:0.3, pointRadius:2 },
-        { label:'100% Views',  data:dates.map(d=>D.tiktok[d].vv100||0), borderColor:'#FF6B8A', backgroundColor:'transparent', borderWidth:1.5, borderDash:[4,3], fill:false, tension:0.3, pointRadius:2 }
-      ]
-    },
-    options:{
-      responsive:true,
-      scales:{ x:{ticks:{maxTicksLimit:15,font:{size:10}}}, y:{ticks:{font:{size:10}}} },
-      plugins:{ legend:LEGEND }
-    }
-  });
-}
-
-function renderChannelKPIs() {
-  const chDefs = [
-    { elId:'kpi-meta-see',   perf: D.performance.find(p=>p.channel==='Meta See'),     color:'#0081FB', extra:'Bereik' },
-    { elId:'kpi-meta-think', perf: D.performance.find(p=>p.channel==='Meta Think'),   color:'#4267B2', extra:'Bereik' },
-    { elId:'kpi-tiktok',     perf: D.performance.find(p=>p.channel==='TikTok Think'), color:'#EE1D52', extra:'VTR' },
-    { elId:'kpi-meta-do',    perf: D.performance.find(p=>p.channel==='Meta Do'),      color:'#3578E5', extra:'Bereik' },
-  ];
-  chDefs.forEach(({elId, perf, color, extra}) => {
-    const el = document.getElementById(elId);
-    if (!el || !perf) return;
-    const extraVal = extra === 'VTR' ? fmtP(perf.vtr||0,1)+' VTR' : fmt(perf.reach)+' bereik';
-    el.innerHTML = `
-      <div class="kpi-card"><div class="kpi-label">Impressies</div><div class="kpi-val" style="font-size:18px">${fmt(perf.imp)}</div><div class="kpi-sub">${extraVal}</div></div>
-      <div class="kpi-card orange"><div class="kpi-label">Clicks</div><div class="kpi-val" style="font-size:18px">${fmt(perf.clicks)}</div><div class="kpi-sub">CTR: ${fmtP(perf.ctr)}</div></div>
-      <div class="kpi-card green"><div class="kpi-label">Besteed</div><div class="kpi-val" style="font-size:18px">${fmtE(perf.spend)}</div><div class="kpi-sub">CPC: ${fmtE(perf.cpc)}</div></div>
-      <div class="kpi-card purple"><div class="kpi-label">CPM</div><div class="kpi-val" style="font-size:18px">${fmtE(perf.cpm)}</div><div class="kpi-sub">Freq: ${perf.freq.toFixed(2)}</div></div>
-    `;
-  });
-}
-
-// ── DOOH CHARTS ───────────────────────────────────────────
-function renderDoohCharts() {
-  const dates = dailyDates(D.dooh);
-  mkChart('chart-dooh-daily', {
-    type:'bar',
-    data:{
-      labels: dates.map(d=>d.slice(5)),
-      datasets:[{ label:'DOOH Impressies', data:dates.map(d=>D.dooh[d].imp||0), backgroundColor:'#9B59B6CC', borderRadius:4 }]
-    },
-    options:{ responsive:true, scales:{ x:{ticks:{font:{size:10}}}, y:{ticks:{font:{size:10}}} }, plugins:{ legend:{display:false} } }
-  });
-  mkChart('chart-dooh-donut', {
-    type:'doughnut',
-    data:{ labels:D.doohPublishers.map(p=>p.name), datasets:[{ data:D.doohPublishers.map(p=>p.imp), backgroundColor:D.doohPublishers.map(p=>p.color), borderWidth:2 }] },
-    options:{ cutout:'65%', plugins:{ legend:LEGEND, tooltip:{callbacks:{label:ctx=>' '+ctx.label+': '+fmt(ctx.raw)+' imp'}} } }
-  });
-}
-
-// ── GA4 CHARTS ────────────────────────────────────────────
-window.setGaMetric = function(m) {
-  gaMetric = m;
-  ['sessions','engaged','atc','checkouts'].forEach(x => {
-    const btn = document.getElementById('ga-m-'+x);
-    if (btn) { btn.classList.toggle('active', x===m); }
-  });
-  renderGa4Charts();
-};
-
-function renderGa4Charts() {
-  const dates = dailyDates(D.ga4);
-  const colors = { sessions:'#3182ce', engaged:'#38b2ac', atc:'#ed8936', checkouts:'#48bb78' };
-  const col = colors[gaMetric];
-
-  mkChart('chart-ga4', {
-    type:'line',
-    data:{
-      labels: dates.map(d=>d.slice(5)),
-      datasets:[{
-        label: metricLabels[gaMetric],
-        data: dates.map(d => D.ga4[d]?D.ga4[d][gaMetric]||0:0),
-        borderColor: col, backgroundColor: col+'20',
-        borderWidth:2, fill:true, tension:0.3, pointRadius:2,
-      }]
-    },
-    options:{ responsive:true, scales:{ x:{ticks:{maxTicksLimit:15,font:{size:10}}}, y:{ticks:{font:{size:10}}} }, plugins:{ legend:{display:false} } }
-  });
-
-  // GA4 funnel bar
-  const vals = Object.values(D.ga4);
-  const totS = vals.reduce((s,v)=>s+(v.sessions||0),0);
-  const totE = vals.reduce((s,v)=>s+(v.engaged||0),0);
-  const totA = vals.reduce((s,v)=>s+(v.atc||0),0);
-  const totC = vals.reduce((s,v)=>s+(v.checkouts||0),0);
-  mkChart('chart-ga4-funnel', {
-    type:'bar',
-    data:{
-      labels:['Sessies','Betrokken','Add-to-cart','Checkouts'],
-      datasets:[{ data:[totS,totE,totA,totC], backgroundColor:['#3182ceCC','#38b2acCC','#ed8936CC','#48bb78CC'], borderRadius:4 }]
-    },
-    options:{
-      responsive:true,
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.raw)}} },
-      scales:{ x:{ticks:{font:{size:11}}}, y:{ticks:{font:{size:10},callback:v=>v>=1e3?(v/1e3).toFixed(0)+'K':v}} }
-    }
-  });
-
-  // Checkout rate per day
-  const rateData = dates.map(d => {
-    const row = D.ga4[d];
-    if (!row || !row.sessions) return 0;
-    return +(row.checkouts/row.sessions*100).toFixed(2);
-  });
-  mkChart('chart-ga4-rate', {
-    type:'line',
-    data:{
-      labels: dates.map(d=>d.slice(5)),
-      datasets:[{ label:'Checkout Rate %', data:rateData, borderColor:'#48bb78', backgroundColor:'#48bb7820', borderWidth:2, fill:true, tension:0.3, pointRadius:2 }]
-    },
-    options:{
-      responsive:true,
-      scales:{ x:{ticks:{maxTicksLimit:15,font:{size:10}}}, y:{ticks:{font:{size:10},callback:v=>v+'%'}} },
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.raw+'%'}} }
-    }
-  });
-}
-
-function renderGaKPIs() {
-  const vals = Object.values(D.ga4);
-  const totS = vals.reduce((s,v)=>s+(v.sessions||0),0);
-  const totE = vals.reduce((s,v)=>s+(v.engaged||0),0);
-  const totA = vals.reduce((s,v)=>s+(v.atc||0),0);
-  const totC = vals.reduce((s,v)=>s+(v.checkouts||0),0);
-  set('ga-sessions',  fmt(totS));
-  set('ga-engaged',   fmt(totE));
-  set('ga-atc',       fmt(totA));
-  set('ga-checkouts', fmt(totC));
-}
-
-// ── GLOBAL METRIC TOGGLES ─────────────────────────────────
-window.setChMetric = function(ch, metric) {
-  chMetric[ch] = metric;
-  const prefixMap = { see:'ms', think:'mt', tiktok:'tt', do:'md' };
-  const prefix = prefixMap[ch];
-  ['imp','reach','clicks','cost'].forEach(m => {
-    const btn = document.getElementById(prefix+'-m-'+m);
-    if (btn) btn.classList.toggle('active', m===metric);
-  });
-  renderChannelCharts();
-};
-
-// ── INIT ─────────────────────────────────────────────────
-renderAll();
-
-})();
-</script>
 </body>
 </html>
